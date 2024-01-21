@@ -21,7 +21,7 @@
 					Oliver Gould &lt;oli&#64;ver.ooo&gt;
 				</h1>
 			</div>
-			<ul class="flex space-x-4 text-sm text-dark-blue dark:text-light-blue">
+			<ul class="flex space-x-4 text-sm text-dark-green dark:text-light-blue">
 				<li><a href="#whoami">whoami</a></li>
 				<li><a href="#work">work</a></li>
 				<li><a href="#wares">wares</a></li>
@@ -30,15 +30,15 @@
 	</header>
 
 	<main>
-		<section id="whoami" class="mt-10">
+		<section id="whoami">
 			<h2>🌊 whoami</h2>
-			<div class="p-2">
+			<div class="p-2 text-xl">
 				<p>Hi, I'm Oliver Gould. I live in California.</p>
 				<p>I build trustworthy software systems.</p>
 			</div>
 		</section>
 
-		<section id="work" class="mt-10">
+		<section id="work">
 			<h2>☁️ work</h2>
 			<div class="p-2">
 				<p>
@@ -48,48 +48,48 @@
 					<a href="https://linkerd.io">Linkerd</a>.
 				</p>
 				<p>
-					Before that, I helped build and run a website called twitter.com. That's all long-dead
-					now.
+					Before that, I helped build and run a website called twitter.com. That's all dead now.
 				</p>
 			</div>
 		</section>
 
-		<section id="wares" class="mt-10">
+		<section id="wares">
 			<h2>🌲 wares</h2>
 			<div class="p-2">
-				<p>Recent highlights include:</p>
-				<ul class="list-none">
-					<li>
-						<GitHubProjectOverview org="linkerd" repo="linkerd2-proxy">
-							<p>
-								Where I've spent the majority of my time over the past few years. The Linkerd proxy
-								is a high-performance, open source service mesh data plane written in Rust.
-							</p>
-						</GitHubProjectOverview>
-					</li>
-					<li>
-						<GitHubProjectOverview org="olix0r" repo="kubert">
-							<p>
-								Utilities for Kubernetes-oriented applications in Rust. We use this to write both
-								CLIs and controllers in Linkerd.
-							</p>
-						</GitHubProjectOverview>
-					</li>
-					<li>
-						<GitHubProjectOverview org="tower-rs" repo="tower">
-							<p>Primitives for building services and clients in Rust.</p>
-							<p>I've been primarily responsible for the load balancing components.</p>
-						</GitHubProjectOverview>
-					</li>
-					<li>
-						<GitHubProjectOverview org="olix0r" repo="ver.ooo">
-							<p>
-								This website; an excuse to play with Typescript, SvelteKit, Tailwind CSS, and
-								Cloudflare Pages.
-							</p>
-						</GitHubProjectOverview>
-					</li>
-				</ul>
+				<p>What I'm working on:</p>
+				<div class="p-2">
+					<ul class="list-none text-base">
+						<li>
+							<GitHubProjectOverview org="linkerd" repo="linkerd2-proxy">
+								<p>
+									Where I've spent the majority of my time over the past few years. The Linkerd
+									proxy is a high-performance, open source service mesh data plane written in Rust.
+								</p>
+							</GitHubProjectOverview>
+						</li>
+						<li>
+							<GitHubProjectOverview org="olix0r" repo="kubert">
+								<p>
+									Utilities for Kubernetes-oriented applications in Rust. We use this to write both
+									CLIs and controllers in Linkerd.
+								</p>
+							</GitHubProjectOverview>
+						</li>
+						<li>
+							<GitHubProjectOverview org="tower-rs" repo="tower" name="tower-balance">
+								<p>A generic request load balancer for Tokio. Used by Linkerd.</p>
+							</GitHubProjectOverview>
+						</li>
+						<li>
+							<GitHubProjectOverview org="olix0r" repo="ver.ooo">
+								<p>
+									This website; an excuse to play with Typescript, SvelteKit, Tailwind CSS, and
+									Cloudflare Pages.
+								</p>
+							</GitHubProjectOverview>
+						</li>
+					</ul>
+				</div>
 			</div>
 		</section>
 	</main>
@@ -101,12 +101,16 @@
 		font-family: 'Instrument Serif', serif;
 	}
 
+	main section {
+		@apply mt-8;
+	}
+
 	main section h2 {
-		@apply text-2xl text-dark-blue dark:text-light-blue;
+		@apply text-2xl text-dark-green dark:text-light-blue;
 	}
 
 	main section p {
-		@apply mt-2 text-lg text-dark-green dark:text-light-green;
+		@apply mt-2  text-dark-blue dark:text-light-green;
 	}
 
 	main section :global(a) {
@@ -114,9 +118,9 @@
 	}
 
 	main section#wares li {
-		@apply mt-4 text-lg;
+		@apply mt-4;
 	}
 	main section#wares li p {
-		@apply text-sm text-dark-green dark:text-light-green;
+		@apply text-dark-blue dark:text-light-green;
 	}
 </style>
