@@ -28,15 +28,15 @@
 
 	<main>
 		<section id="whoami" class="mt-10">
-			<h2>whoami</h2>
+			<h2>🌊 whoami</h2>
 			<div class="p-2">
 				<p>Hi, I'm Oliver Gould. I live in California.</p>
-				<p>I work to make software more trustworthy.</p>
+				<p>I build trustworthy software systems.</p>
 			</div>
 		</section>
 
 		<section id="work" class="mt-10">
-			<h2>work</h2>
+			<h2>☁️ work</h2>
 			<div class="p-2">
 				<p>
 					I am the co-founder and CTO of a company called <a href="https://buoyant.io">Buoyant</a>.
@@ -52,7 +52,7 @@
 		</section>
 
 		<section id="wares" class="mt-10">
-			<h2>wares</h2>
+			<h2>🌲 wares</h2>
 			<div class="p-2">
 				<p>Recent highlights include:</p>
 				<ul class="list-none">
@@ -67,24 +67,21 @@
 					<li>
 						<GitHubProjectOverview org="olix0r" repo="kubert">
 							<p>
-								Utilities to write Kubernetes-oriented applications in Rust. We use this to write
-								both CLIs and controllers in Linkerd.
+								Utilities for Kubernetes-oriented applications in Rust. We use this to write both
+								CLIs and controllers in Linkerd.
 							</p>
 						</GitHubProjectOverview>
 					</li>
 					<li>
 						<GitHubProjectOverview org="tower-rs" repo="tower">
 							<p>Primitives for building services and clients in Rust.</p>
-							<p>
-								I've been primarily responsible for the load balancing components (which have been
-								improved substantially in linkerd2-proxy).
-							</p>
+							<p>I've been primarily responsible for the load balancing components.</p>
 						</GitHubProjectOverview>
 					</li>
 					<li>
 						<GitHubProjectOverview org="olix0r" repo="ver.ooo">
 							<p>
-								This website, an excuse to play with Typescript, SvelteKit, Tailwind CSS, and
+								This website; an excuse to play with Typescript, SvelteKit, Tailwind CSS, and
 								Cloudflare Pages.
 							</p>
 						</GitHubProjectOverview>
