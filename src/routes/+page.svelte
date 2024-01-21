@@ -3,7 +3,7 @@
 </script>
 
 <svelte:head>
-	<title>ver.ooo</title>
+	<title>Oliver Gould &lt;🌊&#64;☁️.🌲&gt</title>
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 	<link
@@ -15,10 +15,13 @@
 <div class="container mx-auto p-4">
 	<header class="header">
 		<nav>
-			<h1 class="text-3xl text-dark-gold dark:text-light-gold">
-				Oliver Gould &lt;oli&#64;ver.ooo&gt;
-			</h1>
-			<ul class="flex space-x-4 text-dark-blue dark:text-light-blue">
+			<div class="flex">
+				<img src="/favicon.png" alt="Dog energy" class="mr-2 h-8 w-8 rounded-xl" />
+				<h1 class="text-3xl text-dark-gold dark:text-light-gold">
+					Oliver Gould &lt;oli&#64;ver.ooo&gt;
+				</h1>
+			</div>
+			<ul class="flex space-x-4 text-sm text-dark-blue dark:text-light-blue">
 				<li><a href="#whoami">whoami</a></li>
 				<li><a href="#work">work</a></li>
 				<li><a href="#wares">wares</a></li>
