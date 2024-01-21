@@ -1,3 +1,7 @@
+<script lang="ts">
+	import GitHubProjectOverview from '$lib/GitHubProjectOverview.svelte';
+</script>
+
 <svelte:head>
 	<title>ver.ooo</title>
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -11,7 +15,9 @@
 <div class="container mx-auto p-4">
 	<header class="header">
 		<nav>
-			<h1 class="text-3xl text-dark-gold dark:text-light-gold">&lt;oli@ver.ooo&gt;</h1>
+			<h1 class="text-3xl text-dark-gold dark:text-light-gold">
+				Oliver Gould &lt;oli&#64;ver.ooo&gt;
+			</h1>
 			<ul class="flex space-x-4 text-dark-blue dark:text-light-blue">
 				<li><a href="#whoami">whoami</a></li>
 				<li><a href="#work">work</a></li>
@@ -23,45 +29,68 @@
 	<main>
 		<section id="whoami" class="mt-10">
 			<h2>whoami</h2>
-			<p class="mt-4">Hi, I'm Oliver.</p>
-			<p class="mt-4">I think software isn't trustworthy enough.</p>
+			<div class="p-2">
+				<p>Hi, I'm Oliver Gould. I live in California.</p>
+				<p>I work to make software more trustworthy.</p>
+			</div>
 		</section>
 
 		<section id="work" class="mt-10">
 			<h2>work</h2>
-			<p class="mt-4">
-				I am the co-founder of a company called <a href="https://buoyant.io">Buoyant</a>. Buoyant
-				pioneered the service mesh pattern with the open source project
-				<a href="https://linkerd.io">Linkerd</a>.
-			</p>
-			<p class="mt-4">
-				Before that, I helped build and run a website called twitter.com. That's all long-dead now.
-			</p>
+			<div class="p-2">
+				<p>
+					I am the co-founder and CTO of a company called <a href="https://buoyant.io">Buoyant</a>.
+					Buoyant helps organizations make their software more secure and more reliable using the
+					innovative open source service mesh,
+					<a href="https://linkerd.io">Linkerd</a>.
+				</p>
+				<p>
+					Before that, I helped build and run a website called twitter.com. That's all long-dead
+					now.
+				</p>
+			</div>
 		</section>
 
 		<section id="wares" class="mt-10">
 			<h2>wares</h2>
-			<ul class="list-inside list-disc">
-				<li>
-					<a href="https://github.com/olix0r/ver.ooo">olix0r/ver.ooo</a>
-					<p>This website, an excuse to play with Typescript, SvelteKit, and Tailwind CSS.</p>
-				</li>
-				<li>
-					<a href="https://github.com/linkerd/linkerd2-proxy">linkerd/linkerd2-proxy</a>
-					<p>
-						Where I've spent the majority of my time over the past few years, the Linkerd proxy is a
-						high-performance, open source service mesh data plane written in Rust.
-					</p>
-				</li>
-				<li>
-					<a href="https://github.com/olix0r/kubert">olix0r/kubert</a>
-					<p>Kubernetes client utilities for Rust. We use this to write both CLIs and controller</p>
-				</li>
-				<li>
-					<a href="https://github.com/tower-rs/tower">tower-rs/tower</a>
-					<p>Primitives for building services and clients in Rust.</p>
-				</li>
-			</ul>
+			<div class="p-2">
+				<p>Recent highlights include:</p>
+				<ul class="list-none">
+					<li>
+						<GitHubProjectOverview org="linkerd" repo="linkerd2-proxy">
+							<p>
+								Where I've spent the majority of my time over the past few years. The Linkerd proxy
+								is a high-performance, open source service mesh data plane written in Rust.
+							</p>
+						</GitHubProjectOverview>
+					</li>
+					<li>
+						<GitHubProjectOverview org="olix0r" repo="kubert">
+							<p>
+								Utilities to write Kubernetes-oriented applications in Rust. We use this to write
+								both CLIs and controllers in Linkerd.
+							</p>
+						</GitHubProjectOverview>
+					</li>
+					<li>
+						<GitHubProjectOverview org="tower-rs" repo="tower">
+							<p>Primitives for building services and clients in Rust.</p>
+							<p>
+								I've been primarily responsible for the load balancing components (which have been
+								improved substantially in linkerd2-proxy).
+							</p>
+						</GitHubProjectOverview>
+					</li>
+					<li>
+						<GitHubProjectOverview org="olix0r" repo="ver.ooo">
+							<p>
+								This website, an excuse to play with Typescript, SvelteKit, Tailwind CSS, and
+								Cloudflare Pages.
+							</p>
+						</GitHubProjectOverview>
+					</li>
+				</ul>
+			</div>
 		</section>
 	</main>
 </div>
@@ -77,17 +106,17 @@
 	}
 
 	main section p {
-		@apply text-lg text-dark-green dark:text-light-green;
+		@apply mt-2 text-lg text-dark-green dark:text-light-green;
 	}
 
-	main section a {
+	main section :global(a) {
 		@apply text-dark-gold hover:underline dark:text-light-gold;
 	}
 
 	main section#wares li {
-		@apply text-lg text-dark-green dark:text-light-green;
+		@apply mt-4 text-lg;
 	}
 	main section#wares li p {
-		@apply ml-6;
+		@apply text-sm text-dark-green dark:text-light-green;
 	}
 </style>
