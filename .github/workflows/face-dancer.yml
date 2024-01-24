@@ -1,0 +1,38 @@
+name: Face Dancer
+
+on:
+  schedule:
+    # Saturday morning PST
+    - cron: '0 16 * * 6'
+
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/face-dancer.yml'
+      - 'face-dancer/src/**'
+
+permissions:
+  contents: read
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - uses: actions/checkout@v4
+
+      - run: npm install
+        working-directory: face-dancer
+
+      - run: npm run build
+        working-directory: face-dancer
+
+      - run: npm run post
+        working-directory: face-dancer
+        env:
+          BLUESKY_PASS: ${{ secrets.BLUESKY_PASS }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
