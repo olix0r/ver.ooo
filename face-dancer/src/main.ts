@@ -82,6 +82,17 @@ if (process.env.NO_GENERATE) {
 	process.exit(0);
 }
 
+// Ensure we can log in to Bluesky before generating an image.
+const bsky = new atp.BskyAgent({
+	service: 'https://bsky.social'
+});
+const login = await bskyLogin(
+	bsky,
+	process.env.BLUESKY_USER!,
+	process.env.BLUESKY_PASS!,
+);
+console.log(`Logged into Bluesky as ${login.handle} (${login.did})`);
+
 const openai = new OpenAI();
 const imgOrig = await generate(openai, prompt);
 console.log(`Generated 1024x1024 image ${imgOrig.byteLength / 1024}KB`);
@@ -98,17 +109,6 @@ if (process.env.NO_POSTING) {
 	console.log("NO POSTING!");
 	process.exit(0);
 }
-
-const bsky = new atp.BskyAgent({
-	service: 'https://bsky.social'
-});
-
-const login = await bskyLogin(
-	bsky,
-	process.env.BLUESKY_USER!,
-	process.env.BLUESKY_PASS!,
-);
-console.log(`Logged into Bluesky as ${login.handle} (${login.did})`);
 
 const ref = await upload(bsky, img);
 console.log(`Uploaded image ref ${ref}`);
