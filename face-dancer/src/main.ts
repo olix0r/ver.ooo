@@ -5,8 +5,8 @@ import tempfile from 'tempfile';
 import { promises as fs } from 'fs';
 import sharp from 'sharp';
 
-async function generate(api: OpenAI, prompt: string) {
-	const airsp = await api.images.generate({
+async function generateImage(ai: OpenAI, prompt: string) {
+	const gen = await ai.images.generate({
 		prompt: prompt,
 		model: "dall-e-3",
 		n: 1,
@@ -17,8 +17,29 @@ async function generate(api: OpenAI, prompt: string) {
 	});
 
 	// Decode the base64-encoded image
-	const imageData = airsp.data[0].b64_json!;
-	return Buffer.from(imageData, 'base64');
+	const image = Buffer.from(gen.data[0].b64_json!, 'base64');
+	const description = gen.data[0].revised_prompt || prompt;
+	return { image, description };
+}
+
+async function generateText(ai: OpenAI, context: string) {
+	const completion = await ai.chat.completions.create({
+		model: "gpt-4-turbo-preview",
+		temperature: 1.5,
+		messages: [
+		  {
+			"role": "system",
+			"content": context,
+		  },
+		  {
+			"role": "user",
+			"content": "Create a new post."
+		  }
+		],
+	});
+
+	return completion.choices[0].message.content!;
+
 }
 
 async function bskyLogin(agent: atp.BskyAgent, identifier: string, password: string) {
@@ -30,11 +51,6 @@ async function bskyLogin(agent: atp.BskyAgent, identifier: string, password: str
 }
 
 async function upload(agent: atp.BskyAgent, img: Buffer) {
-	// // Write the image to a tmpfile and log the path.
-	// const path = tempfile({ extension: 'png' });
-	// await fs.writeFile(path, img);
-	// console.log("Wrote ", img.byteLength / 1024, "KB to", path);
-
 	console.log("Uploading", img.byteLength / 1024, "KB");
 	const blobRsp = await agent.uploadBlob(img, { encoding: "image/png" });
 	if (!blobRsp.success) {
@@ -55,10 +71,9 @@ async function updateProfile(agent: atp.BskyAgent, image: atp.BlobRef) {
 	});
 }
 
-async function post(agent: atp.BskyAgent, image: atp.BlobRef) {
-	const alt = "vee ee ar dot oh oh oh";
+async function postImage(agent: atp.BskyAgent, image: atp.BlobRef, text: string, alt: string) {
 	return await agent.post({
-		text: "Woof.",
+		text,
 		embed: {
 			$type: "app.bsky.embed.images",
 			images: [{ image, alt }],
@@ -70,12 +85,24 @@ dotenv.config();
 
 const animals = ["trout", "shark", "alligator", "manta-ray", "lobster", "soccer-ball", "salmon", "flamingo"];
 const animal = animals[Math.floor(Math.random() * animals.length)];
-const prompt = "In the style of psychedelic new age web art, an image featuring a background patterned with" +
-	` ${animal}-shaped stuffed animals that have been torn and mangled by a dog, with stuffing flowing out of their wounds.` +
-	" Overlayed in the foreground is a saintly depiction of a small black pit-lab mix dog's head." +
-	" Within the dog's head is a psychedelic depiction of the dog's chakra energy, symbolizing its connection to cosmic oneness." +
-	" The art style should feature vibrant, psychedelic colors and a web appearance.";
+const prompt = `In the style of psychedelic new age web art, an image featuring a background patterned with
+${animal}-shaped stuffed animals that have been torn and mangled by a dog, with stuffing flowing out of their wounds.
+Overlayed in the foreground is a saintly depiction of a small black pit-lab mix dog's head.
+Within the dog's head is a psychedelic depiction of the dog's chakra energy, symbolizing its connection to cosmic oneness.
+The art style should feature vibrant, psychedelic colors and a web appearance.`;
 console.log(`Prompt: ${prompt}`);
+
+const context = `You are the social media manager for a cult-leader dog.
+The god-dog is a cosmic being, connected to the oneness of all of the universe. His followers span the internet.
+The god-dog is an expert coder.
+The god-dog's followers offer up stuffed ${animal}s for the god-dog to destroy.
+Your posts are for the social network Bluesky.
+Your posts are short--140 characters or less.
+They may include symbols, coordinates, typescript and rust code samples, and space ghost coast to coast references.
+They are meant to convey deeper meaning to the dog's disciples, they are not intended for the uninitiated.
+You can include UTF-8 glitch art.
+Omit quotes and hashtags.`;
+console.log(`Context: ${context}`);
 
 if (process.env.NO_GENERATE) {
 	console.log("NO GENERATE!");
@@ -94,16 +121,19 @@ const login = await bskyLogin(
 console.log(`Logged into Bluesky as ${login.handle} (${login.did})`);
 
 const openai = new OpenAI();
-const imgOrig = await generate(openai, prompt);
-console.log(`Generated 1024x1024 image ${imgOrig.byteLength / 1024}KB`);
 
-const img = await sharp(imgOrig).resize(256, 256).toBuffer();
+const imgGen = await generateImage(openai, prompt);
+console.log(`Generated 1024x1024 image ${imgGen.image.byteLength / 1024}KB`);
+const img = await sharp(imgGen.image).resize(256, 256).toBuffer();
 console.log(`Resized to 256x256 ${img.byteLength / 1024}KB`);
 
 // Write the image to a tmpfile and log the path.
 const path = tempfile({ extension: 'png' });
 await fs.writeFile(path, img);
 console.log(`Wrote ${img.byteLength / 1024}KB to ${path}`);
+
+const post = await generateText(openai, context);
+console.log(`Generated post: ${post}`);
 
 if (process.env.NO_POSTING) {
 	console.log("NO POSTING!");
@@ -116,5 +146,5 @@ console.log(`Uploaded image ref ${ref}`);
 await updateProfile(bsky, ref);
 console.log("Updated profile avatar");
 
-const p = await post(bsky, ref);
+const p = await postImage(bsky, ref, post, imgGen.description);
 console.log(`Posted ${p}`);
