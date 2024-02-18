@@ -8,7 +8,7 @@
     "post": "node target/main.js"
   },
   "devDependencies": {
-    "@types/node": "^20.11.5",
+    "@types/node": "^20.11.19",
     "typescript": "^5.0.4"
   },
   "dependencies": {
