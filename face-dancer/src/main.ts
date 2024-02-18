@@ -146,5 +146,5 @@ console.log(`Uploaded image ref ${ref}`);
 await updateProfile(bsky, ref);
 console.log("Updated profile avatar");
 
-const p = await postImage(bsky, ref, post, imgGen.description);
+const p = await postImage(bsky, ref, post, `A cosmic dog-god and its ${animal}s.`);
 console.log(`Posted ${p}`);
