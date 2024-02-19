@@ -27,7 +27,6 @@ async function generateImage(ai: OpenAI, prompt: string) {
 async function generateText(ai: OpenAI, context: string) {
 	const completion = await ai.chat.completions.create({
 		model: 'gpt-4-turbo-preview',
-		temperature: 1.5,
 		max_tokens: 64,
 		messages: [
 			{
@@ -81,7 +80,7 @@ async function postImage(agent: atp.BskyAgent, image: atp.BlobRef, text: string,
 			features: [
 				{
 					$type: 'app.bsky.richtext.facet#link',
-					uri: `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}&zoom=8`,
+					uri: coordUrl(lat, lon),
 				},
 			],
 		})),
@@ -90,6 +89,10 @@ async function postImage(agent: atp.BskyAgent, image: atp.BlobRef, text: string,
 			images: [{ image, alt }],
 		},
 	});
+}
+
+function coordUrl(lat: number, lon: number) {
+	return `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}&zoom=8`;
 }
 
 dotenv.config();
@@ -117,47 +120,50 @@ const animals = [
 	'shrimp',
 	'clam',
 	'oyster',
-	'scallop',
-	'mussel',
 	'snail',
-	'slug',
 	'butterfly',
-	'moth',
-	'dragonfly',
 	'bee',
-	'wasp',
-	'ant',
-	'grasshopper',
-	'cricket',
-	'beetle',
 	'ladybug',
-	'mosquito',
-	'cockroach',
 	'praying-mantis',
-	'centipede',
-	'millipede',
 	'scorpion',
+	'tiger',
+	'lion',
+	'cheetah',
+	'leopard',
+	'jaguar',
+	'panther',
+	'cougar',
+	'elephant',
+	'horse',
+	'zebra',
+	'giraffe',
+	'rhinoceros',
+	'geoduck',
 ];
 const animal = animals[Math.floor(Math.random() * animals.length)];
 
 const vibes = ['vibrant', 'psychedelic', 'cosmic', 'new age', 'retro', 'cyberpunk', 'goth', 'halucinated', 'cybernetic'];
 const vibe = vibes[Math.floor(Math.random() * vibes.length)];
 
-const styles = [
-	'web',
-	'pixel',
-	'glitch',
-	'impressionist',
-	'pointillist',
-	'cubist',
-	'surrealist',
-	'dadaist',
-	'futurist',
-	'renaissance',
-	'modernist',
-	'minimalist',
-];
+const styles = ['web', 'pixel', 'glitch', 'dadaist', 'renaissance', 'modernist', 'minimalist', 'post-modernist'];
 const style = styles[Math.floor(Math.random() * styles.length)];
+
+const lores = [
+	'The X-Files',
+	'Space Ghost Coast to Coast',
+	'Venture Bros.',
+	'Kids in the Hall',
+	"MTV's The State",
+	'Reno 911',
+	'Buffy the Vampire Slayer',
+	'Angel',
+	'LOST',
+	'Fringe',
+	'Quantum Leap',
+	'The Matrix',
+	'The Fifth Element',
+];
+const lore = lores[Math.floor(Math.random() * lores.length)];
 
 const prompt = `In the style of ${vibe} ${style} art, an image featuring a background patterned with
 ${animal}-shaped stuffed animals that have been torn and mangled by a dog, with stuffing flowing out of their wounds.
@@ -179,23 +185,23 @@ Some facts about the god-dog:
 * It DEMANDS ${animal}s.
 * It is ineffable.
 * It is confident in its knowledge of the universe and its place in it.
-* It is a hacker.
-* It has seen every episode of the following TV shows and is steeped in their lore:
-  * The X-Files
-  * Twin Peaks
-  * Space Ghost Coast to Coast
-  * Ghost Adventures
-  *
+* ${lore} is believed to be sacred by its followers, encoding deep truths about the universe.
+* The god-dog was discovered as a part of The Stargate Project, and has been a part of the US government's secret projects since the 1970s.
 
 Your main job is to solicit ${animal}s for the god-dog, specifying a location for them to be collected for consumption.
-The god-dog will destroy them and absorb their energy, expelling their fluff in a spectacle for the followers to harvest.
+The god-dog will destroy the ${animal}s and absorb their energy, expelling their fluff in a spectacle for the followers to harvest.
+
+Locations are chosen to either be near a historically supernatural location, or to be the location of a US government military intelligence facility.
 
 Posting rules:
 
 * Posts are written from the perspective of the god-dog, in the god-dog's all-knowing voice.
-* Posts should specify GPS coordinates for the location of the ${animal}s.
-* GPS coordinates are in the form "🌐[lat, lon]".
+* Posts bestow blessings and felicitations upon the world, while demanding tribute.
+* Posts use simple and direct language, with a charismatic and confident tone.
+* Posts must specify the GPS coordinates in the form "🌐[lat, lon]"
 * Posts may include symbols, utf glitch art, emoji, typescript and rust code samples.
+* Posts should include deep references to '${lore}', so that the initiated will recognize the connection.
+* Posts must not mention "${lore}" by name.
 * Posts are SHORT. They MUST be at MOST 140 characters.
 * Posts must never name or try to describe the god-dog. The god-dog is ineffable. Even the term 'god-dog' is a misnomer.
 * Posts must not use the word 'cult' or 'cult-leader'. The relationship between the god-dog and its followers is ineffable.
@@ -204,11 +210,14 @@ Posting rules:
 * Posts must not use the word 'solicit'.
 * Posts must not use the word 'consume'.
 * Posts must not use the word 'plush' or 'fluff'.
+* Posts must not overtly reference the god-dog's connection to the US government.
 * Posts must not describe the god-dog.
-* Posts MUST NOT use hash-tags!
-* Posts must not use quotation marks unless as part of an explicit, attributed quotation.
 
-Seriously, don't use hash-tags or you're fired!
+IMPORTANT Formatting notes:
+
+* GPS coordinates MUST be in the form "🌐[lat, lon]"
+* Posts MUST NOT use hash-tags!
+* Posts should not be quoted unless they are an explicit, attributed quotation.
 `;
 
 if (process.env.NO_GENERATE) {
@@ -231,6 +240,9 @@ const text = await generateText(openai, context);
 console.log(`Generated text: ${text}`);
 
 const coords = matchCoords(text);
+for (const { lat, lon } of coords) {
+	console.log(`Coordinates: ${coordUrl(lat, lon)}`);
+}
 
 const imgGen = await generateImage(openai, prompt);
 console.log(`Generated 1024x1024 image ${imgGen.image.byteLength / 1024}KB`);
