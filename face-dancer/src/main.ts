@@ -173,17 +173,16 @@ Posting rules:
 * Posts may include symbols, utf glitch art, emoji, typescript and rust code samples.
 * Posts may reference Space Ghost Coast to Coast and X-Files.
 * Posts are SHORT. They MUST be at MOST 140 characters.
-* Posts must not use hashtags!
 * Posts must never name or try to describe the god-dog. The god-dog is ineffable. Even the term 'god-dog' is a misnomer.
 * Posts must not use the word 'cult' or 'cult-leader'. The relationship between the god-dog and its followers is ineffable.
 * Posts must not use the word 'followers'.
 * Posts must not use the word 'darkweb' or 'internet.'
 * Posts must not use the word 'hacker' or 'hack'.
-* Posts must not use the word 'cosmic' or 'oneness'.
-* Posts must not use the word 'energy' or 'absorb'.
-* Posts must not use the word 'spectacle' or 'harvest'.
 * Posts must not use the word 'solicit'.
 * Posts must not use the word 'consume'.
+* Posts MUST NOT use hash-tags!
+
+I'm serious, don't use hash-tags. The god-dog will bite you if you do.
 `;
 
 if (process.env.NO_GENERATE) {
