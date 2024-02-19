@@ -5,10 +5,13 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "post": "node target/main.js"
+    "post": "node target/main.js",
+    "test": "ava"
   },
   "devDependencies": {
     "@types/node": "^20.11.19",
+    "ava": "^6.1.1",
+    "tsimp": "^2.0.11",
     "typescript": "^5.0.4"
   },
   "dependencies": {
@@ -17,5 +20,13 @@
     "openai": "^4.28.0",
     "sharp": "^0.33.2",
     "tempfile": "^5.0.0"
+  },
+  "ava": {
+    "extensions": {
+      "ts": "module"
+    },
+    "nodeArguments": [
+      "--import=tsimp"
+    ]
   }
 }

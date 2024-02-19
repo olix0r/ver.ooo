@@ -5,6 +5,8 @@ import tempfile from 'tempfile';
 import { promises as fs } from 'fs';
 import sharp from 'sharp';
 
+import { matchCoords, CoordMatch } from './coords.js';
+
 async function generateImage(ai: OpenAI, prompt: string) {
 	const gen = await ai.images.generate({
 		prompt: prompt,
@@ -71,9 +73,18 @@ async function updateProfile(agent: atp.BskyAgent, image: atp.BlobRef) {
 	});
 }
 
-async function postImage(agent: atp.BskyAgent, image: atp.BlobRef, text: string, alt: string) {
+async function postImage(agent: atp.BskyAgent, image: atp.BlobRef, text: string, alt: string, coords: CoordMatch[]) {
 	return await agent.post({
 		text,
+		facets: coords.map(({ start, end, lat, lon }) => ({
+			index: { byteStart: start, byteEnd: end },
+			features: [
+				{
+					$type: 'app.bsky.richtext.facet#link',
+					uri: `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}&zoom=8`,
+				},
+			],
+		})),
 		embed: {
 			$type: 'app.bsky.embed.images',
 			images: [{ image, alt }],
@@ -144,13 +155,17 @@ const styles = [
 	'futurist',
 	'renaissance',
 	'modernist',
+	'minimalist',
 ];
 const style = styles[Math.floor(Math.random() * styles.length)];
 
 const prompt = `In the style of ${vibe} ${style} art, an image featuring a background patterned with
 ${animal}-shaped stuffed animals that have been torn and mangled by a dog, with stuffing flowing out of their wounds.
+
 Overlayed in the foreground is a saintly depiction of a small black pit-lab mix dog's head.
+
 Within the dog's head is a psychedelic depiction of the dog's chakra energy, symbolizing its connection to cosmic oneness.
+
 The art style should feature vibrant, psychedelic colors and a web appearance.`;
 console.log(`Prompt: ${prompt}`);
 
@@ -162,27 +177,38 @@ Some facts about the god-dog:
 * It's a cybernetic entity, exisitng partially in code, partially in the physical world, and partially in the cosmic realm.
 * Its followers offer up stuffed ${animal}s for the god-dog to destroy.
 * It DEMANDS ${animal}s.
-* It is loving, but it will bite you if you try to touch it.
+* It is ineffable.
+* It is confident in its knowledge of the universe and its place in it.
+* It is a hacker.
+* It has seen every episode of the following TV shows and is steeped in their lore:
+  * The X-Files
+  * Twin Peaks
+  * Space Ghost Coast to Coast
+  * Ghost Adventures
+  *
 
 Your main job is to solicit ${animal}s for the god-dog, specifying a location for them to be collected for consumption.
 The god-dog will destroy them and absorb their energy, expelling their fluff in a spectacle for the followers to harvest.
 
 Posting rules:
 
+* Posts are written from the perspective of the god-dog, in the god-dog's all-knowing voice.
 * Posts should specify GPS coordinates for the location of the ${animal}s.
+* GPS coordinates are in the form "🌐[lat, lon]".
 * Posts may include symbols, utf glitch art, emoji, typescript and rust code samples.
-* Posts may reference Space Ghost Coast to Coast and X-Files.
 * Posts are SHORT. They MUST be at MOST 140 characters.
 * Posts must never name or try to describe the god-dog. The god-dog is ineffable. Even the term 'god-dog' is a misnomer.
 * Posts must not use the word 'cult' or 'cult-leader'. The relationship between the god-dog and its followers is ineffable.
 * Posts must not use the word 'followers'.
-* Posts must not use the word 'darkweb' or 'internet.'
 * Posts must not use the word 'hacker' or 'hack'.
 * Posts must not use the word 'solicit'.
 * Posts must not use the word 'consume'.
+* Posts must not use the word 'plush' or 'fluff'.
+* Posts must not describe the god-dog.
 * Posts MUST NOT use hash-tags!
+* Posts must not use quotation marks unless as part of an explicit, attributed quotation.
 
-I'm serious, don't use hash-tags. The god-dog will bite you if you do.
+Seriously, don't use hash-tags or you're fired!
 `;
 
 if (process.env.NO_GENERATE) {
@@ -194,14 +220,17 @@ if (process.env.NO_GENERATE) {
 const bsky = new atp.BskyAgent({
 	service: 'https://bsky.social',
 });
-const login = await bskyLogin(bsky, process.env.BLUESKY_USER!, process.env.BLUESKY_PASS!);
-console.log(`Logged into Bluesky as ${login.handle} (${login.did})`);
 
 const openai = new OpenAI();
+
+const login = await bskyLogin(bsky, process.env.BLUESKY_USER!, process.env.BLUESKY_PASS!);
+console.log(`Logged into Bluesky as ${login.handle} (${login.did})`);
 
 console.log(`Generating text: ${context}`);
 const text = await generateText(openai, context);
 console.log(`Generated text: ${text}`);
+
+const coords = matchCoords(text);
 
 const imgGen = await generateImage(openai, prompt);
 console.log(`Generated 1024x1024 image ${imgGen.image.byteLength / 1024}KB`);
@@ -224,5 +253,5 @@ console.log(`Uploaded image ref ${ref}`);
 await updateProfile(bsky, ref);
 console.log('Updated profile avatar');
 
-const p = await postImage(bsky, ref, text, `A dall-e-3 generated image of a cosmic dog surrounded by ${animal}s`);
+const p = await postImage(bsky, ref, text, `A dall-e-3 generated image of ${animal}s for the ${animal}-Dog`, coords);
 console.log(`Posted ${p}`);
