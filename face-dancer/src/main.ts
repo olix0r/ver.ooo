@@ -275,12 +275,12 @@ Posting rules:
 * Posts must not overtly reference the god-dog's connection to the US government.
 * Posts must not describe the god-dog.
 
-IMPORTANT Formatting notes:
+PAY ATTENTION TO THESE IMPORTANT FORMATTING RULES. IF YOU VIOLATE THEM, THE POSTS WILL NOT SUCCEED AND THE GOD-DOG WILL BE ANGRY:
 
 * GPS coordinates MUST be in the form "🌐lat,lon"
 * Posts MUST NOT use hash-tags!
 * Posts should not be quoted unless they are an explicit, attributed quotation.
-* Posts MUST be at MOST 280 characters.
+* Posts MUST be at MOST 200 characters.
 `;
 
 if (process.env.NO_GENERATE) {
