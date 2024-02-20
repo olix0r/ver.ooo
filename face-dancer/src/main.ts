@@ -1,91 +1,11 @@
 import dotenv from 'dotenv';
-import atp from '@atproto/api';
 import OpenAI from 'openai';
 import tempfile from 'tempfile';
 import { promises as fs } from 'fs';
 import sharp from 'sharp';
 
+import * as atp from './atp.js';
 import { matchCoords } from './coords.js';
-
-async function generateImage(ai: OpenAI, prompt: string) {
-	const gen = await ai.images.generate({
-		prompt: prompt,
-		model: 'dall-e-3',
-		n: 1,
-		response_format: 'b64_json',
-		size: '1024x1024',
-		style: 'vivid',
-		quality: 'standard',
-	});
-
-	// Decode the base64-encoded image
-	const image = Buffer.from(gen.data[0].b64_json!, 'base64');
-	const description = gen.data[0].revised_prompt || prompt;
-	return { image, description };
-}
-
-async function generateText(ai: OpenAI, context: string) {
-	const completion = await ai.chat.completions.create({
-		model: 'gpt-4-turbo-preview',
-		max_tokens: 128,
-		messages: [
-			{
-				role: 'system',
-				content: context,
-			},
-			{
-				role: 'user',
-				content: 'Create a new post.',
-			},
-		],
-	});
-
-	return completion.choices[0].message.content!;
-}
-
-async function bskyLogin(agent: atp.BskyAgent, identifier: string, password: string) {
-	const login = await agent.login({ identifier, password });
-	if (!login.success) {
-		throw new Error('Login failed');
-	}
-	return login.data;
-}
-
-async function upload(agent: atp.BskyAgent, img: Buffer) {
-	console.log('Uploading', img.byteLength / 1024, 'KB');
-	const blobRsp = await agent.uploadBlob(img, { encoding: 'image/png' });
-	if (!blobRsp.success) {
-		throw new Error('Blob upload failed');
-	}
-	return blobRsp.data.blob;
-}
-
-async function updateProfile(agent: atp.BskyAgent, image: atp.BlobRef) {
-	await agent.upsertProfile((existing) => {
-		if (!existing) {
-			return {
-				avatar: image,
-			};
-		}
-		existing.avatar = image;
-		return existing;
-	});
-}
-
-async function postImage(agent: atp.BskyAgent, image: atp.BlobRef, text: string, alt: string, facets: atp.Facet[]) {
-	return await agent.post({
-		text,
-		facets,
-		embed: {
-			$type: 'app.bsky.embed.images',
-			images: [{ image, alt }],
-		},
-	});
-}
-
-function coordUrl(lat: number, lon: number) {
-	return `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}&zoom=8`;
-}
 
 dotenv.config();
 
@@ -159,33 +79,31 @@ The art style should feature vibrant, psychedelic colors and a web appearance.`;
 console.log(`Prompt: ${prompt}`);
 
 // Ensure we can log in to Bluesky before generating an image.
-const bsky = new atp.BskyAgent({
-	service: 'https://bsky.social',
-});
+const bsky = await atp.login(process.env.BLUESKY_USER!, process.env.BLUESKY_PASS!);
+console.log(`Logged into Bluesky as ${bsky.login.handle} (${bsky.login.did})`);
 
-const login = await bskyLogin(bsky, process.env.BLUESKY_USER!, process.env.BLUESKY_PASS!);
-console.log(`Logged into Bluesky as ${login.handle} (${login.did})`);
-
-const folRsp = await bsky.getFollowers({
-	actor: login.did,
+const folRsp = await bsky.agent.getFollowers({
+	actor: bsky.login.did,
 });
 if (!folRsp.success) {
 	throw new Error('Failed to get followers');
 }
 
-const defaultBio = "An idiot and a fool and a liar and a coward and a traitor and a tool of the god-dog's enemies.";
 const followerContexts = folRsp.data.followers.map(
-	(f) => `
+	(f) =>
+		`
 	---
-	Name: "${f.displayName}"
 	Handle: @${f.handle}
-	Bio: ${f.description || defaultBio}
+	` +
+		(f.displayName ? `	Name: "${f.displayName}"\n` : ``) +
+		(f.description ? `	Bio:\n${f.description}"\n` : ``) +
+		`
 	...
 	`,
 );
 
-const feedRsp = await bsky.getActorLikes({
-	actor: login.did,
+const feedRsp = await bsky.agent.getActorLikes({
+	actor: bsky.login.did,
 	limit: 20,
 });
 if (!feedRsp.success) {
@@ -203,7 +121,7 @@ const recentPostsContext =
 
 const context = `You are the social media manager for a cult-leader god-dog.
 
-Some facts about the god-dog:
+## The god-dog
 
 * It is a cosmic being, connected to the oneness of all of the universe. His followers span the darkweb and internet.
 * It's a cybernetic entity, exisitng partially in code, partially in the physical world, and partially in the cosmic realm.
@@ -218,41 +136,29 @@ Some facts about the god-dog:
 Your main job is to solicit ${animal}s for the god-dog, specifying a location for them to be collected for consumption.
 The god-dog will destroy the ${animal}s and absorb their energy, expelling their fluff in a spectacle for the followers to harvest.
 
-Some locations where the god-dog demands tribute include:
+## Locations for ${animal}s to be collected:
 
-* US military bases
-* Nuclear power plants
-* Submarine bases
-* Area 51
-* The Bermuda Triangle
-* The Mariana Trench
+* Near the location of followers.
+* Power facilities
+* Military bases
 * Rocket launch sites
-* Missile silos
+* Abandoned mental hospitals
 * The Chernobyl Exclusion Zone
 * Dracula's Castle in Transylvania
 * Satellite arrays
-* Secret underground bunkers
-* The Large Hadron Collider
-* Bill Gates' house
-* The corporate headquarters of the world's largest tech companies and military contractors
-* Siberian gulags
+* Airports
+* Test sites
 * Volcanoes
 
----
-
-Here is some information about the dog-god's followers:
+## Followers
 
 ${followerContexts}
 
----
-
-Here are some recent posts the god-dog has liked:
+## Recent likes
 
 ${recentPostsContext}
 
----
-
-Posting rules:
+## Posting rules:
 
 * Written from the perspective of the god-dog.
 * Written in the simple, direct words of a dog. They are not eloquent. They are urgent and demanding.
@@ -275,7 +181,7 @@ Posting rules:
 * Posts must not overtly reference the god-dog's connection to the US government.
 * Posts must not describe the god-dog.
 
-PAY ATTENTION TO THESE IMPORTANT FORMATTING RULES. IF YOU VIOLATE THEM, THE POSTS WILL NOT SUCCEED AND THE GOD-DOG WILL BE ANGRY:
+## PAY ATTENTION TO THESE IMPORTANT FORMATTING RULES. IF YOU VIOLATE THEM, THE POSTS WILL NOT SUCCEED AND THE GOD-DOG WILL BE ANGRY:
 
 * GPS coordinates MUST be in the form "🌐lat,lon"
 * Posts MUST NOT use hash-tags!
@@ -291,6 +197,7 @@ if (process.env.NO_GENERATE) {
 const openai = new OpenAI();
 
 console.log(`Generating text: ${context}`);
+
 const text = await generateText(openai, context);
 console.log(`Generated text: ${text}`);
 
@@ -308,26 +215,6 @@ const facets: atp.Facet[] = coords.map(({ byteStart, byteEnd, lat, lon }) => ({
 		},
 	],
 }));
-
-// const mention = findMention(text, followerName, follower.did);
-// if (mention) {
-// 	// Ensure it doesn't overlap with any other facets.
-// 	let overlaps = false;
-// 	for (const facet of facets) {
-// 		if (mention.index.byteStart < facet.index.byteEnd && mention.index.byteEnd > facet.index.byteStart) {
-// 			overlaps = true;
-// 			break;
-// 		}
-// 	}
-// 	if (overlaps) {
-// 		console.log('Mention overlaps with other facets');
-// 	} else {
-// 		console.log(`Mentioned ${followerName}`);
-// 		facets.push(mention);
-// 	}
-// }
-// // Sort the facets by byteStart
-// facets.sort((a, b) => a.index.byteStart - b.index.byteStart);
 
 if (process.env.NO_GENERATE_IMG) {
 	console.log('NO GENERATE IMAGE!');
@@ -349,11 +236,44 @@ if (process.env.NO_POSTING) {
 	process.exit(0);
 }
 
-const ref = await upload(bsky, img);
-console.log(`Uploaded image ref ${ref}`);
+await atp.updateAndPost(bsky.agent, text, facets, img, `A dall-e-3 generated image of ${animal}s for the ${animal}-Dog`);
 
-await updateProfile(bsky, ref);
-console.log('Updated profile avatar');
+async function generateImage(ai: OpenAI, prompt: string) {
+	const gen = await ai.images.generate({
+		prompt: prompt,
+		model: 'dall-e-3',
+		n: 1,
+		response_format: 'b64_json',
+		size: '1024x1024',
+		style: 'vivid',
+		quality: 'standard',
+	});
 
-const p = await postImage(bsky, ref, text, `A dall-e-3 generated image of ${animal}s for the ${animal}-Dog`, facets);
-console.log(`Posted ${p}`);
+	// Decode the base64-encoded image
+	const image = Buffer.from(gen.data[0].b64_json!, 'base64');
+	const description = gen.data[0].revised_prompt || prompt;
+	return { image, description };
+}
+
+async function generateText(ai: OpenAI, context: string) {
+	const completion = await ai.chat.completions.create({
+		model: 'gpt-4-turbo-preview',
+		max_tokens: 128,
+		messages: [
+			{
+				role: 'system',
+				content: context,
+			},
+			{
+				role: 'user',
+				content: 'Create a new post.',
+			},
+		],
+	});
+
+	return completion.choices[0].message.content!;
+}
+
+function coordUrl(lat: number, lon: number) {
+	return `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}&zoom=8`;
+}
