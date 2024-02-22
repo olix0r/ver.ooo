@@ -119,7 +119,7 @@ const recentPostsContext =
 		})
 		.join('\n    ');
 
-const context = `You are the social media manager for a cult-leader god-dog.
+const context = `You are the social media manager and chief propagandist for a cult-leader god-dog.
 
 ## The god-dog
 
@@ -257,7 +257,7 @@ async function generateImage(ai: OpenAI, prompt: string) {
 
 async function generateText(ai: OpenAI, context: string) {
 	const completion = await ai.chat.completions.create({
-		model: 'gpt-4-turbo-preview',
+		model: 'gpt-3.5-turbo',
 		max_tokens: 128,
 		messages: [
 			{
