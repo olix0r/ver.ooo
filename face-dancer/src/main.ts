@@ -257,7 +257,7 @@ async function generateImage(ai: OpenAI, prompt: string) {
 
 async function generateText(ai: OpenAI, context: string) {
 	const completion = await ai.chat.completions.create({
-		model: 'gpt-3.5-turbo',
+		model: 'gpt-4-turbo-preview',
 		max_tokens: 128,
 		messages: [
 			{
