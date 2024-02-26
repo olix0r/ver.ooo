@@ -15,7 +15,7 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "@atproto/api": "^0.9.8",
+    "@atproto/api": "^0.10.1",
     "dotenv": "^16.4.4",
     "openai": "^4.28.0",
     "sharp": "^0.33.2",
