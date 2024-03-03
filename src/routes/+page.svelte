@@ -17,7 +17,7 @@
 	<header class="header">
 		<nav>
 			<div class="flex">
-				<img src={$page.data.avatar} alt="Dog energy" class="mr-2 h-8 w-8 rounded-full" />
+				<img src="/favicon.png" alt="Dog energy" class="mr-2 h-8 w-8 rounded-full" />
 				<h1 class="text-3xl text-dark-gold dark:text-light-gold">
 					Oliver Gould &lt;oli&#64;ver.ooo&gt;
 				</h1>
