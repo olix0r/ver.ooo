@@ -12,6 +12,8 @@ export interface Atp {
 	uploadBlob(png: Buffer, encoding: string): Promise<atp.BlobRef>;
 	updateProfile(profile: Profile): Promise<void>;
 	post(text: string, facets: atp.Facet[], image: ImageRef): Promise<{ uri: string }>;
+
+	detectFacets(text: string): Promise<Facet[]>;
 }
 
 export interface Follower {
@@ -51,6 +53,7 @@ export async function login(identifier: string, password: string): Promise<Atp> 
 		uploadBlob: (img, enc) => uploadBlob(agent, img, enc),
 		updateProfile: (profile) => updateProfile(agent, profile),
 		post: (text, facets, image) => post(agent, text, facets, image),
+		detectFacets: (text) => detectFacets(agent, text),
 	};
 }
 
@@ -105,4 +108,10 @@ async function followers(agent: atp.BskyAgent, actor: Did) {
 		throw new Error('Failed to fetch followers');
 	}
 	return rsp.data.followers.map((f) => ({ ...f }));
+}
+
+async function detectFacets(agent: atp.BskyAgent, text: string) {
+	const rt = new atp.RichText({ text });
+	await rt.detectFacets(agent);
+	return rt.facets || [];
 }
