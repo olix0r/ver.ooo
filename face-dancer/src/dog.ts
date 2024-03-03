@@ -88,6 +88,8 @@ The god-dog will destroy the stuffed animals and absorb their energy, expelling 
 
 ## Types of animals
 
+Choose ONE of the following animals for each post:
+
 * Bears
 * Trout
 * Salmon
