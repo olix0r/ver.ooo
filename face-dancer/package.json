@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@atproto/api": "^0.9.8",
-    "dotenv": "^16.4.4",
+    "dotenv": "^16.4.5",
     "openai": "^4.28.0",
     "sharp": "^0.33.2",
     "tempfile": "^5.0.0"
