@@ -43,7 +43,9 @@ const banner = await sharp(update.banner.image).resize(256, 256).toBuffer();
 
 const [avatarRef, bannerRef] = await Promise.all([avatar, banner].map((img) => bsky.uploadBlob(img, 'image/png')));
 
-await Promise.all([bsky.updateProfile({ avatar: avatarRef, banner: bannerRef, ...update.profile }), post(bsky, update.post, avatarRef)]);
+await bsky.updateProfile({ avatar: avatarRef, banner: bannerRef, ...update.profile });
+
+await post(bsky, update.post, avatarRef);
 
 async function post(bsky: atp.Atp, post: dogt.Post, image: atp.BlobRef) {
 	const facets = await bsky.detectFacets(update.post.text);

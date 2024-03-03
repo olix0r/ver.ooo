@@ -44,7 +44,7 @@ export interface ProfileUpdate {
 	// A Dall-E-3 prompt generating an image to use as a banner.
 	//
 	// The image is themed around the lore and location of the post, featuring
-	// eviscerated stuffed animals.
+	// mangled stuffed animals.
 	bannerPrompt: string;
 }
 
