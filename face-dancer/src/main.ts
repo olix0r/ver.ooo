@@ -39,20 +39,13 @@ if (process.env.NO_POSTING) {
 }
 
 const avatar = await sharp(update.avatar.image).resize(256, 256).toBuffer();
-const avatarRef = await bsky.uploadBlob(avatar, 'image/png');
-
 const banner = await sharp(update.banner.image).resize(256, 256).toBuffer();
-const bannerRef = await bsky.uploadBlob(banner, 'image/png');
 
-await bsky.updateProfile({ avatar: avatarRef, banner: bannerRef, ...update.profile });
+const [avatarRef, bannerRef] = await Promise.all([avatar, banner].map((img) => bsky.uploadBlob(img, 'image/png')));
 
-const facets = await detectFacets(bsky, update.post);
-await bsky.post(update.post.text, facets, {
-	image: avatarRef,
-	alt: `A dall-e-3 generated image of ${update.animal}s for the ${update.animal}-Dog`,
-});
+await Promise.all([bsky.updateProfile({ avatar: avatarRef, banner: bannerRef, ...update.profile }), post(bsky, update.post, avatarRef)]);
 
-async function detectFacets(bsky: atp.Atp, post: dogt.Post) {
+async function post(bsky: atp.Atp, post: dogt.Post, image: atp.BlobRef) {
 	const facets = await bsky.detectFacets(update.post.text);
 
 	for (const { text, lat, lon } of post.locationRefs) {
@@ -79,5 +72,8 @@ async function detectFacets(bsky: atp.Atp, post: dogt.Post) {
 
 	facets.sort((a, b) => a.index.byteStart - b.index.byteStart);
 
-	return facets;
+	await bsky.post(post.text, facets, {
+		image,
+		alt: `A dall-e-3 generated image of ${update.animal}s for the ${update.animal}-Dog`,
+	});
 }
