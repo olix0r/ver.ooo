@@ -46,19 +46,24 @@ const bannerRef = await bsky.uploadBlob(banner, 'image/png');
 
 await bsky.updateProfile({ avatar: avatarRef, banner: bannerRef, ...update.profile });
 
-await bsky.post(update.post.text, mkFacets(update.post), {
+const facets = await detectFacets(bsky, update.post);
+await bsky.post(update.post.text, facets, {
 	image: avatarRef,
 	alt: `A dall-e-3 generated image of ${update.animal}s for the ${update.animal}-Dog`,
 });
 
-function mkFacets(post: dogt.Post): atp.Facet[] {
-	const facets = post.locationRefs.map(({ text, lat, lon }) => {
+async function detectFacets(bsky: atp.Atp, post: dogt.Post) {
+	const facets = await bsky.detectFacets(update.post.text);
+
+	for (const { text, lat, lon } of post.locationRefs) {
 		const start = post.text.indexOf(text);
 		if (start === -1) {
-			throw new Error('LocationRef not found in text');
+			continue;
 		}
+
 		const end = start + text.length;
-		return {
+
+		facets.push({
 			index: {
 				byteStart: Buffer.byteLength(post.text.substring(0, start), 'utf8'),
 				byteEnd: Buffer.byteLength(post.text.substring(0, end), 'utf8'),
@@ -67,26 +72,6 @@ function mkFacets(post: dogt.Post): atp.Facet[] {
 				{
 					$type: 'app.bsky.richtext.facet#link',
 					uri: `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}&zoom=8`,
-				},
-			],
-		} as atp.Facet;
-	});
-
-	const tags = post.text.matchAll(/#(\w+)/g);
-	if (!tags) {
-		return facets;
-	}
-
-	for (const match of tags) {
-		const index = match.index ?? 0;
-		const byteStart = Buffer.byteLength(post.text.substring(0, index), 'utf8');
-		const byteEnd = Buffer.byteLength(post.text.substring(0, index + match[0].length), 'utf8');
-		facets.push({
-			index: { byteStart, byteEnd },
-			features: [
-				{
-					$type: 'app.bsky.richtext.facet#tag',
-					tag: match[1],
 				},
 			],
 		});
