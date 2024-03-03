@@ -24,9 +24,3 @@ jobs:
 
       - run: npm run build
         working-directory: face-dancer
-
-      - run: npm run post
-        working-directory: face-dancer
-        env:
-          NO_GENERATE: test
-          NO_POSTING: test
