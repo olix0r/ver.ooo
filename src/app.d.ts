@@ -4,18 +4,16 @@ declare global {
   namespace App {
     // interface Error {}
     // interface Locals {}
-
     // Cloudflare Pages
-    interface Platform {
-      env: {
-        COUNTER: DurableObjectNamespace;
-      };
-      context: {
-        waitUntil(promise: Promise<any>): void;
-      };
-      caches: CacheStorage & { default: Cache };
-    }
-
+    // interface Platform {
+    //   env: {
+    //     COUNTER: DurableObjectNamespace;
+    //   };
+    //   context: {
+    //     waitUntil(promise: Promise<any>): void;
+    //   };
+    //   caches: CacheStorage & { default: Cache };
+    // }
     // interface PageData {}
     // interface PageState {}
   }

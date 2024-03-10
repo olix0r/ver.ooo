@@ -1,6 +1,5 @@
 <script lang="ts">
   import GitHubProjectOverview from '$lib/GitHubProjectOverview.svelte';
-  import { page } from '$app/stores';
 </script>
 
 <svelte:head>
@@ -96,7 +95,7 @@
   </main>
 </div>
 
-<style>
+<style lang="postcss">
   :global(:root) {
     @apply bg-white dark:bg-black;
     font-family: 'Instrument Serif', serif;
