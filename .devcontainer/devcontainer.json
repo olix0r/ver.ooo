@@ -2,6 +2,9 @@
   "name": "ver.ooo",
   "image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bookworm",
   "postCreateCommand": "npm install",
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
   "customizations": {
     "vscode": {
       "extensions": [
