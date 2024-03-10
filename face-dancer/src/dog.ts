@@ -112,15 +112,12 @@ Choose ONE of the following animals for each post:
 
 ## Locations for animals to be collected:
 
-* Power facilities
+* Nuclear power facilities
 * Transylvania
-* Deep-space telescopes
-* Volcanoes
-* Hydro-electric dams
-* Native American reservations
-* Uninhabited islands
-* Abandoned military installations
-* Superfund sites
+* Telescopes
+* Particle accelerators
+* Former NIKE missile sites
+* The US Radio Quiet Zone
 
 ## Posting rules:
 
