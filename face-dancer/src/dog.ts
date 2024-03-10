@@ -152,51 +152,51 @@ ${TYPES}
 const JSON_PROMPT = `Generate an update. OMIT MARKDOWN CODE WRAPPING.`;
 
 export async function generate(lore: string) {
-	const ai = new OpenAI();
+  const ai = new OpenAI();
 
-	const completion = await ai.chat.completions.create({
-		model: 'gpt-4-turbo-preview',
-		max_tokens: 1024,
-		messages: [
-			{
-				role: 'system',
-				content: SYSTEM_PROMPT(lore),
-			},
-			{
-				role: 'user',
-				content: JSON_PROMPT,
-			},
-		],
-	});
+  const completion = await ai.chat.completions.create({
+    model: 'gpt-4-turbo-preview',
+    max_tokens: 1024,
+    messages: [
+      {
+        role: 'system',
+        content: SYSTEM_PROMPT(lore),
+      },
+      {
+        role: 'user',
+        content: JSON_PROMPT,
+      },
+    ],
+  });
 
-	const json = completion.choices[0].message.content!;
+  const json = completion.choices[0].message.content!;
 
-	console.log(json);
-	const update = JSON.parse(json) as DogUpdate;
-	console.log(update);
+  console.log(json);
+  const update = JSON.parse(json) as DogUpdate;
+  console.log(update);
 
-	const [avatar, banner] = await Promise.all([
-		generateImage(ai, update.profile.avatarPrompt),
-		generateImage(ai, update.profile.bannerPrompt),
-	]);
+  const [avatar, banner] = await Promise.all([
+    generateImage(ai, update.profile.avatarPrompt),
+    generateImage(ai, update.profile.bannerPrompt),
+  ]);
 
-	return { avatar, banner, ...update };
+  return { avatar, banner, ...update };
 }
 
 async function generateImage(ai: OpenAI, prompt: string) {
-	console.log(`Generating image: ${prompt.replaceAll('\n', ' ')}`);
-	const gen = await ai.images.generate({
-		prompt: prompt,
-		model: 'dall-e-3',
-		n: 1,
-		response_format: 'b64_json',
-		size: '1024x1024',
-		style: 'vivid',
-		quality: 'standard',
-	});
+  console.log(`Generating image: ${prompt.replaceAll('\n', ' ')}`);
+  const gen = await ai.images.generate({
+    prompt: prompt,
+    model: 'dall-e-3',
+    n: 1,
+    response_format: 'b64_json',
+    size: '1024x1024',
+    style: 'vivid',
+    quality: 'standard',
+  });
 
-	// Decode the base64-encoded image
-	const image = Buffer.from(gen.data[0].b64_json!, 'base64');
-	const description = gen.data[0].revised_prompt || prompt;
-	return { image, description };
+  // Decode the base64-encoded image
+  const image = Buffer.from(gen.data[0].b64_json!, 'base64');
+  const description = gen.data[0].revised_prompt || prompt;
+  return { image, description };
 }

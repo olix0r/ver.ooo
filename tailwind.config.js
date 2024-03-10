@@ -21,8 +21,6 @@ module.exports = {
       textColor: ['dark'],
     },
   },
-  plugins: [
-    tailwindcssDarkMode(),
-  ],
+  plugins: [tailwindcssDarkMode()],
   // darkMode: 'class', // allows toggling dark mode with class="dark"
-}
+};
