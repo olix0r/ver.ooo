@@ -1,32 +1,40 @@
 {
-  "name": "ver.ooo-face-dancer",
-  "version": "0.0.0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "build": "tsc",
-    "post": "node target/main.js",
-    "test": "ava"
-  },
-  "devDependencies": {
-    "@types/node": "^20.11.24",
-    "ava": "^6.1.1",
-    "tsimp": "^2.0.11",
-    "typescript": "^5.0.4"
-  },
-  "dependencies": {
-    "@atproto/api": "^0.10.4",
-    "dotenv": "^16.4.5",
-    "openai": "^4.28.0",
-    "sharp": "^0.33.2",
-    "tempfile": "^5.0.0"
-  },
-  "ava": {
-    "extensions": {
-      "ts": "module"
-    },
-    "nodeArguments": [
-      "--import=tsimp"
-    ]
-  }
+	"name": "ver.ooo-face-dancer",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"build": "tsc",
+		"post": "node target/main.js",
+		"test": "ava",
+		"lint": "prettier --check . && eslint ."
+	},
+	"devDependencies": {
+		"@types/node": "^20.11.24",
+		"@types/eslint": "8.56.3",
+		"@typescript-eslint/eslint-plugin": "^7.0.1",
+		"@typescript-eslint/parser": "^7.1.0",
+		"ava": "^6.1.1",
+		"eslint": "^8.57.0",
+		"eslint-config-prettier": "^9.1.0",
+		"prettier": "^3.2.5",
+		"prettier-package-json": "^2.8.0",
+		"tsimp": "^2.0.11",
+		"typescript": "^5.0.4"
+	},
+	"dependencies": {
+		"@atproto/api": "^0.10.4",
+		"dotenv": "^16.4.5",
+		"openai": "^4.28.0",
+		"sharp": "^0.33.2",
+		"tempfile": "^5.0.0"
+	},
+	"ava": {
+		"extensions": {
+			"ts": "module"
+		},
+		"nodeArguments": [
+			"--import=tsimp"
+		]
+	}
 }

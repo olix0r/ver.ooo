@@ -1,9 +1,7 @@
 {
 	"compilerOptions": {
 		"target": "es2021",
-		"lib": [
-			"es2021"
-		],
+		"lib": ["es2021"],
 		"jsx": "react",
 		"rootDir": "./src",
 		"module": "nodeNext",
@@ -18,6 +16,6 @@
 		"isolatedModules": true,
 		"forceConsistentCasingInFileNames": true,
 		"strict": true,
-		"skipLibCheck": true
-	}
+		"skipLibCheck": true,
+	},
 }
