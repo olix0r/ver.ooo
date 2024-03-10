@@ -1,5 +1,6 @@
 import atp from '@atproto/api';
 
+export type BlobRef = atp.BlobRef;
 export type Facet = atp.Facet;
 export type FacetLink = atp.FacetLink;
 export type FacetTag = atp.FacetTag;

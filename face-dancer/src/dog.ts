@@ -44,7 +44,7 @@ export interface ProfileUpdate {
 	// A Dall-E-3 prompt generating an image to use as a banner.
 	//
 	// The image is themed around the lore and location of the post, featuring
-	// eviscerated stuffed animals.
+	// mangled stuffed animals.
 	bannerPrompt: string;
 }
 
@@ -87,6 +87,8 @@ Your main job is to solicit stuffed animals for the god-dog, specifying a locati
 The god-dog will destroy the stuffed animals and absorb their energy, expelling their fluff in a spectacle for the followers to harvest.
 
 ## Types of animals
+
+Choose ONE of the following animals for each post:
 
 * Bears
 * Trout
