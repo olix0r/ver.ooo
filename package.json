@@ -38,6 +38,6 @@
     "tailwindcss-dark-mode": "^1.1.7",
     "tslib": "^2.4.1",
     "typescript": "^5.0.0",
-    "vite": "^5.1.4"
+    "vite": "^5.1.6"
   }
 }
