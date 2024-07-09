@@ -1,5 +1,4 @@
-import type { PageServerLoad } from './$types';
-
+// Based on Brian Eno and Peter Schmidt's Oblique Strategies.
 const strategies = [
   '(Organic) machinery',
   'A line has two sides',
@@ -138,7 +137,7 @@ const strategies = [
   'Retrace your steps',
   'Revaluation (a warm feeling)',
   'Reverse',
-  'Short circuit (example; a man eating peas with the idea that they will improve his virility shovels them straight into his lap)',
+  'Short circuit (example: a man eating peas with the idea that they will improve his virility shovels them straight into his lap)',
   'Shut the door and listen from outside',
   'Simple subtraction',
   'Simply a matter of work',
@@ -198,12 +197,15 @@ const strategies = [
   'Your mistake was a hidden intention',
 ];
 
-export const load: PageServerLoad = async () => {
+function seed(): number {
   const date = new Date();
-  const base = Math.floor(date.getTime() / (15 * 60 * 1000));
-  const index = Math.floor(base % strategies.length);
-  return {
-    strategies,
-    index,
-  };
-};
+  return Math.floor(date.getTime() / (15 * 60 * 1000));
+}
+
+export function strategy(idx?: number): string {
+  if (idx === undefined) {
+    idx = seed();
+  }
+  const strategy = strategies[idx % strategies.length];
+  return strategy;
+}

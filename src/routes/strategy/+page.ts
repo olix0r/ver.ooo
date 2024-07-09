@@ -1,9 +1,9 @@
 import type { PageLoad } from './$types';
+import { strategy } from '$lib/strategy';
 
-export const load: PageLoad = ({ data, url }) => {
+export const load: PageLoad = ({ url }) => {
   const idx = url.searchParams.get('idx');
   return {
-    strategies: data.strategies,
-    index: idx ? Number.parseInt(idx) : data.index,
+    strategy: strategy(idx ? Number.parseInt(idx) : undefined),
   };
 };
