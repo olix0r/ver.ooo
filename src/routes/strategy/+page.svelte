@@ -49,11 +49,11 @@
 
 <style lang="postcss">
   :global(:root) {
-    @apply bg-gray-50 dark:bg-gray-950;
+    @apply bg-white dark:bg-black;
     font-family: 'Instrument Serif', serif;
   }
 
   main .card {
-    @apply bg-white text-dark-green dark:bg-black dark:text-light-blue;
+    @apply bg-gray-50 text-dark-green dark:bg-gray-950 dark:text-light-blue;
   }
 </style>
