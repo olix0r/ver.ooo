@@ -13,7 +13,7 @@
   onMount(() => {
     interval = setInterval(() => {
       console.log('Refreshing strategy');
-      strategyStore.set(strategy());
+      strategyStore.set(strategy(data.index));
     }, 10000);
   });
 
@@ -36,10 +36,12 @@
   <main class="w-full max-w-4xl">
     <div class="flex min-h-screen flex-col items-center justify-center">
       {#key $strategyStore}
-        <h1 class="text-6xl" aria-live="polite" in:fade={{ delay: 1000, duration: 4000 }}>
-          <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-          {@html $strategyStore}
-        </h1>
+        <div class="card flex rounded-2xl p-16">
+          <h1 class="text-6xl" aria-live="polite" in:fade={{ delay: 1000, duration: 4000 }}>
+            <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+            {@html $strategyStore}
+          </h1>
+        </div>
       {/key}
     </div>
   </main>
@@ -47,11 +49,11 @@
 
 <style lang="postcss">
   :global(:root) {
-    @apply bg-white dark:bg-black;
+    @apply bg-gray-50 dark:bg-gray-950;
     font-family: 'Instrument Serif', serif;
   }
 
-  main h1 {
-    @apply text-dark-green dark:text-light-blue;
+  main .card {
+    @apply bg-white text-dark-green dark:bg-black dark:text-light-blue;
   }
 </style>

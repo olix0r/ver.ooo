@@ -75,7 +75,7 @@
     "Take away the elements in order of apparent non-importance",
     "The inconsistency principle",
     "The most important thing is the thing most easily forgotten",
-    "Think<br/><ul><li>Inside the work<li/><li>Outside the work</li>",
+    "<div class='flex flex-row'><div class='p-4 m-4'>Think</div><div class='p-4 m-4'>Inside the work<br/>Outside the work</div></div>",
     "Tidy up",
     "Towards the insignificant",
     "Trust in the you of now",
