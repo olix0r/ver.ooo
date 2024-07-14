@@ -17,7 +17,7 @@
     "Cut a vital connection",
     "Decorate, decorate",
     "Define an area as 'safe' and use it as an anchor",
-    "Destroy<br/><ul><li>nothing</li><li>the most important thing<li></ul>",
+    "<div class='flex flex-row'><div class='p-4 m-4'>Destroy</div><div class='p-4 m-4'>nothing<br/>the most important thing</div></div>",
     "Discard an axiom",
     "Disciplined self-indulgence",
     "Disconnect from desire",

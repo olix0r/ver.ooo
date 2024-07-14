@@ -2,16 +2,6 @@
   import GitHubProjectOverview from '$lib/GitHubProjectOverview.svelte';
 </script>
 
-<svelte:head>
-  <title>Oliver Gould &lt;🌊&#64;☁️.🌲&gt</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Instrument+Serif&display=swap"
-    rel="stylesheet"
-  />
-</svelte:head>
-
 <div class="container mx-auto p-4">
   <header class="header">
     <nav>
@@ -96,11 +86,6 @@
 </div>
 
 <style lang="postcss">
-  :global(:root) {
-    @apply bg-white dark:bg-black;
-    font-family: 'Instrument Serif', serif;
-  }
-
   main section {
     @apply mt-8;
   }
