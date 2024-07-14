@@ -9,14 +9,22 @@
   const refreshPeriod = 15 * 60 * 1000;
 
   let rng = dateStablePRNG(refreshPeriod);
-
   const strategyIdx = writable(rng());
 
   let interval: ReturnType<typeof setInterval>;
   onMount(() => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash) {
+      strategyIdx.set(parseInt(hash, 10));
+    }
+    strategyIdx.subscribe((idx) => {
+      window.location.hash = `#${idx}`;
+    });
+
     if (interval) {
       clearInterval(interval);
     }
+
     interval = setInterval(() => {
       console.log('Refreshing strategy');
       shuffle(refreshPeriod);
@@ -35,23 +43,39 @@
   };
 
   const draw = () => {
-    console.log('Drawing next card');
-    strategyIdx.set(rng());
+    const idx = rng();
+    console.log(`Drawing next card: ${idx}`);
+    strategyIdx.set(idx);
   };
 </script>
 
-<div class="container mx-auto flex min-h-screen items-center justify-center">
+<svelte:window
+  on:keypress={(ev) => {
+    if (ev.key === '*') {
+      shuffle(1000);
+      draw();
+    }
+    if (ev.key === ' ') {
+      draw();
+    }
+  }}
+/>
+
+<div class="container mx-auto flex h-10 min-h-screen items-center justify-center">
   <main class="flex min-h-screen items-center justify-center">
     <button
-      class="card flex items-center justify-center rounded-2xl text-6xl"
+      class="card flex h-full w-full items-center justify-center rounded-3xl shadow-sm hover:shadow-lg"
       on:click={draw}
-      on:dblclick={() => shuffle(1000)}
+      on:dblclick={() => {
+        shuffle(1000);
+        draw();
+      }}
       tabindex="0"
       aria-live="polite"
     >
       {#key $strategyIdx}
         <div
-          class="card-content flex items-center justify-center"
+          class="card-content flex h-full w-full items-center justify-center rounded-3xl p-10 text-left text-4xl"
           aria-live="polite"
           in:fade={{ delay: 1000, duration: 4000 }}
         >
@@ -66,8 +90,6 @@
 <style lang="postcss">
   .container {
     display: flex;
-    align-items: center;
-    justify-content: center;
     height: 100vh;
   }
 
@@ -80,29 +102,16 @@
   }
 
   .card {
-    @apply bg-gray-50 text-dark-green dark:bg-gray-950 dark:text-light-blue;
-    font-size: xx-large;
+    @apply dark:shadow-cyan-950;
     /* Keep things roughly card-shaped */
     min-width: 252px;
     min-height: 180px;
-    max-width: 504px;
-    max-height: 360px;
-    width: 100%;
-    height: 100%;
-    /* display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center; */
-    padding: 2rem;
+    max-width: 756px;
+    max-height: 540px;
     box-sizing: border-box;
   }
 
   .card-content {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+    @apply bg-gray-50 text-dark-green dark:bg-gray-950 dark:text-light-blue;
   }
 </style>
