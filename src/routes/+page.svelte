@@ -15,6 +15,7 @@
         <li><a href="#whoami">whoami</a></li>
         <li><a href="#work">work</a></li>
         <li><a href="#wares">wares</a></li>
+        <li><a href="/strategy">strategies</a></li>
       </ul>
     </nav>
   </header>
@@ -75,6 +76,12 @@
                 <p>
                   This website; an excuse to play with Typescript, SvelteKit, Tailwind CSS, and
                   Cloudflare Pages.
+                </p>
+                <p>
+                  This features a landing page inspired by Brian Eno & Peter Schmidt's
+                  <a href="/strategy"><i>Oblique Strategies</i></a>: a minimalist, randomized deck
+                  of cards to help you break out of creative ruts. I use it as a home page and on a
+                  spare monitor.
                 </p>
               </GitHubProjectOverview>
             </li>
