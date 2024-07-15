@@ -31,48 +31,61 @@
     return h;
   });
 
-  const hashUnsub = hash.subscribe((h) => {
-    if (typeof window !== 'undefined') {
-      window.location.hash = h;
-    }
-  });
+  const help = writable(false);
 
   onMount(() => {
     const initHash = window.location.hash.replace('#', '');
     if (initHash) {
       const [s, i] = initHash.split(';');
-      if (seed) {
-        seed.set(s);
-      }
+      seed.set(s);
       if (i) {
         index.set(parseInt(i, 10));
+      } else {
+        index.set(0);
       }
     } else {
       seed.set(epoch().toISOString());
+      index.set(0);
     }
 
-    const keydown = (ev: KeyboardEvent) => {
+    const hashUnsub = hash.subscribe((h) => {
+      window.location.hash = h;
+    });
+
+    const keyup = (ev: KeyboardEvent) => {
       if (ev.key === '*') {
+        ev.preventDefault();
         seed.set(new Date().toISOString());
         index.set(0);
-      }
-      if (ev.key === ' ') {
+        help.set(false);
+      } else if (ev.key === 'Tab') {
+        ev.preventDefault();
         index.set(($index + 1) % strategies.length);
+        help.set(false);
+      } else if (ev.key === '?') {
+        ev.preventDefault();
+        help.update((h) => !h);
+      } else if (ev.key === 'Escape') {
+        ev.preventDefault();
+        if ($help) {
+          help.set(false);
+        } else if ($index > 0) {
+          index.set(0);
+        } else {
+          seed.set(epoch().toISOString());
+        }
       }
     };
-    window.addEventListener('keydown', keydown);
+    window.addEventListener('keyup', keyup);
     return () => {
-      window.removeEventListener('keydown', keydown);
+      hashUnsub();
+      window.removeEventListener('keyup', keyup);
     };
-  });
-
-  onDestroy(() => {
-    hashUnsub();
   });
 </script>
 
-<div class="container mx-auto flex h-10 min-h-screen items-center justify-center">
-  <main class="flex min-h-screen items-center justify-center">
+<div class="container mx-auto flex h-[100vh] min-h-screen items-center justify-center">
+  <main class="flex h-full min-h-screen w-full items-center justify-center">
     {#key $deck}
       <button
         class="card flex h-full w-full items-center justify-center rounded-3xl shadow-sm hover:shadow-lg"
@@ -83,7 +96,36 @@
         aria-live="polite"
         in:fade={{ delay: 1000 }}
       >
-        {#key $index}
+        {#if $help}
+          <div
+            class="card-content help flex h-full w-full items-center justify-center rounded-3xl p-10 text-left"
+          >
+            <table class="table-auto text-inherit">
+              <thead>
+                <th class="key">Key</th>
+                <th>Action</th>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="key">Tab</td>
+                  <td>Next card</td>
+                </tr>
+                <tr>
+                  <td class="key">*</td>
+                  <td>Shuffle deck</td>
+                </tr>
+                <tr>
+                  <td class="key">?</td>
+                  <td>Toggle help</td>
+                </tr>
+                <tr>
+                  <td class="key">Esc</td>
+                  <td>Clear</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        {:else if $index >= 0 && $index < $deck.length - 1}
           <div
             class="card-content flex h-full w-full items-center justify-center rounded-3xl p-10 text-left text-4xl"
             in:fade={{ duration: 400 }}
@@ -91,24 +133,13 @@
             <!-- eslint-disable-next-line svelte/no-at-html-tags -->
             {@html $deck[$index]}
           </div>
-        {/key}
+        {/if}
       </button>
     {/key}
   </main>
 </div>
 
 <style lang="postcss">
-  .container {
-    display: flex;
-    height: 100vh;
-  }
-
-  main {
-    display: flex;
-    height: 100%;
-    width: 100%;
-  }
-
   .card {
     @apply shadow-yellow-100 dark:shadow-blue-950;
     /* Keep things roughly card-shaped */
@@ -121,5 +152,18 @@
 
   .card-content {
     @apply bg-gray-50 text-dark-green dark:bg-gray-950 dark:text-blue-400;
+  }
+
+  .help thead th {
+    @apply border-b border-b-blue-300 px-6 dark:border-b-yellow-300;
+  }
+  .help tbody td {
+    @apply px-6;
+  }
+  .help .key {
+    @apply bg-gray-100 px-6 text-center dark:bg-gray-900;
+  }
+  .help tbody td .key {
+    @apply font-mono text-xs;
   }
 </style>
