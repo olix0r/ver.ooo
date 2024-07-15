@@ -58,10 +58,18 @@
         seed.set(new Date().toISOString());
         index.set(0);
         help.set(false);
-      } else if (ev.key === 'Tab') {
+      } else if (ev.key === 'Enter' || ev.key === 'ArrowRight') {
         ev.preventDefault();
-        index.set(($index + 1) % strategies.length);
         help.set(false);
+        if ($index < $deck.length - 1) {
+          index.set($index + 1);
+        }
+      } else if (ev.key === 'ArrowLeft') {
+        ev.preventDefault();
+        help.set(false);
+        if ($index > 0) {
+          index.set($index - 1);
+        }
       } else if (ev.key === '?') {
         ev.preventDefault();
         help.update((h) => !h);
@@ -100,7 +108,7 @@
           <div
             class="card-content help flex h-full w-full items-center justify-center rounded-3xl p-10 text-left"
           >
-            <table class="table-auto text-inherit">
+            <table class="table-auto">
               <thead>
                 <th class="key">Key</th>
                 <th>Action</th>
@@ -155,7 +163,10 @@
   }
 
   .help thead th {
-    @apply border-b border-b-blue-300 px-6 dark:border-b-yellow-300;
+    @apply border-b border-b-yellow-200 px-6 dark:border-b-blue-900;
+  }
+  .help thead th.key {
+    @apply rounded-tl-lg;
   }
   .help tbody td {
     @apply px-6;
@@ -163,7 +174,11 @@
   .help .key {
     @apply bg-gray-100 px-6 text-center dark:bg-gray-900;
   }
-  .help tbody td .key {
+  .help tbody td.key {
     @apply font-mono text-xs;
+  }
+  /* Only round the last cell in the table */
+  .help tbody tr:last-child td.key {
+    @apply rounded-bl-lg;
   }
 </style>
