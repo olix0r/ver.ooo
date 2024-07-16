@@ -3,25 +3,29 @@
   import { derived, writable } from 'svelte/store';
   import { fade } from 'svelte/transition';
   // Based on Brian Eno and Peter Schmidt's Oblique Strategies.
-  import { strategies } from '$lib/strategies.json';
   import { prng } from '$lib/prng';
+  import { setSchedule } from '$lib/schedule';
+  import { strategies } from '$lib/strategies.json';
 
   const refreshPeriod = 15 * 60 * 1000;
-  const epoch = () => {
-    const now = new Date();
+  const epoch = (now: Date) => {
     return new Date(Math.floor(now.getTime() / refreshPeriod) * refreshPeriod);
   };
   const seed = writable('', (set) => {
-    const interval = setInterval(() => {
-      const seed = epoch().toISOString();
-      console.log(`Setting seed: ${seed}`);
-      set(seed);
-    }, 60 * 1000);
-    return () => clearInterval(interval);
+    return setSchedule(
+      () => {
+        const seed = epoch(new Date()).toISOString();
+        console.log(`Setting seed: ${seed}`);
+        set(seed);
+      },
+      epoch(new Date()),
+      refreshPeriod
+    );
   });
 
   const deck = derived(seed, ($seed) => prng($seed).shuffle(strategies));
   const index = writable(0);
+
   const hash = derived([seed, index], ([$seed, $index]) => {
     if (!$seed && $index == 0) return '';
     let h = `#${$seed}`;
@@ -44,7 +48,7 @@
         index.set(0);
       }
     } else {
-      seed.set(epoch().toISOString());
+      seed.set(epoch(new Date()).toISOString());
       index.set(0);
     }
 
@@ -58,33 +62,44 @@
         seed.set(new Date().toISOString());
         index.set(0);
         help.set(false);
-      } else if (ev.key === 'Enter' || ev.key === 'ArrowRight') {
+        return;
+      }
+      if (ev.key === 'Enter' || ev.key === 'ArrowRight') {
         ev.preventDefault();
         help.set(false);
         if ($index < $deck.length - 1) {
           index.set($index + 1);
         }
-      } else if (ev.key === 'ArrowLeft') {
+        return;
+      }
+      if (ev.key === 'ArrowLeft') {
         ev.preventDefault();
         help.set(false);
         if ($index > 0) {
           index.set($index - 1);
         }
-      } else if (ev.key === '?') {
+        return;
+      }
+      if (ev.key === '?') {
         ev.preventDefault();
         help.update((h) => !h);
-      } else if (ev.key === 'Escape') {
+        return;
+      }
+      if (ev.key === 'Escape') {
         ev.preventDefault();
         if ($help) {
           help.set(false);
-        } else if ($index > 0) {
-          index.set(0);
-        } else {
-          seed.set(epoch().toISOString());
+          return;
         }
+
+        if ($index == 0) {
+          seed.set(epoch(new Date()).toISOString());
+        }
+        index.set(0);
       }
     };
     window.addEventListener('keyup', keyup);
+
     return () => {
       hashUnsub();
       window.removeEventListener('keyup', keyup);
