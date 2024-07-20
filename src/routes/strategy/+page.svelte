@@ -21,18 +21,24 @@
     );
   });
 
-  const shuffling = derived(seedTs, ($seedTs, set) => {
-    set(true);
-    const timeout = setTimeout(() => {
-      set(false);
-    }, 3100);
-    return () => {
-      clearTimeout(timeout);
-    };
-  });
+  const shuffling = writable(false);
+  const shuffled = writable(false);
 
   const deck = derived(seedTs, ($ts) => prng($ts.toISOString()).shuffle(strategies));
   const index = writable(0);
+
+  onMount(() => {
+    return seedTs.subscribe((ts) => {
+      shuffling.set(true);
+      let t = setTimeout(() => {
+        shuffling.set(false);
+        shuffled.set(false);
+      }, 3100);
+      return () => {
+        clearTimeout(t);
+      };
+    });
+  });
 
   const hash = derived([seedTs, index], ([$seedTs, $index]) => {
     if (!$seedTs && $index == 0) return '';
@@ -158,14 +164,18 @@
           </div>
         {:else if $shuffling}
           <div
-            class="card-content flex h-full w-full items-center justify-center rounded-3xl p-10 text-left text-4xl"
-            in:fade={{ duration: 400 }}
+            class="card-content flex h-full w-full items-center justify-center rounded-3xl p-10 text-left text-sm"
+            in:fade={{ duration: 500 }}
+            out:fade={{ duration: 500 }}
+            on:outroend={() => {
+              shuffled.set(true);
+            }}
           >
             {$seedTs.toISOString()}
           </div>
-        {:else if $index >= 0 && $index < $deck.length - 1}
+        {:else if $shuffled && $index >= 0 && $index < $deck.length - 1}
           <div
-            class="card-content flex h-full w-full items-center justify-center rounded-3xl p-10 text-left text-4xl"
+            class="card-content flex h-full w-full items-center justify-center rounded-3xl p-10 text-left text-2xl"
             in:fade={{ duration: 400 }}
           >
             <!-- eslint-disable-next-line svelte/no-at-html-tags -->
