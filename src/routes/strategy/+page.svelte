@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
-  import { derived, writable } from 'svelte/store';
+  import { derived, readable, readonly, writable } from 'svelte/store';
   import { fade } from 'svelte/transition';
   // Based on Brian Eno and Peter Schmidt's Oblique Strategies.
   import { prng } from '$lib/prng';
@@ -11,24 +11,32 @@
   const epoch = (now: Date) => {
     return new Date(Math.floor(now.getTime() / refreshPeriod) * refreshPeriod);
   };
-  const seed = writable('', (set) => {
+  const seedTs = writable(epoch(new Date()), (set) => {
     return setSchedule(
       () => {
-        const seed = epoch(new Date()).toISOString();
-        console.log(`Setting seed: ${seed}`);
-        set(seed);
+        set(epoch(new Date()));
       },
       epoch(new Date()),
       refreshPeriod
     );
   });
 
-  const deck = derived(seed, ($seed) => prng($seed).shuffle(strategies));
+  const shuffling = derived(seedTs, ($seedTs, set) => {
+    set(true);
+    const timeout = setTimeout(() => {
+      set(false);
+    }, 3100);
+    return () => {
+      clearTimeout(timeout);
+    };
+  });
+
+  const deck = derived(seedTs, ($ts) => prng($ts.toISOString()).shuffle(strategies));
   const index = writable(0);
 
-  const hash = derived([seed, index], ([$seed, $index]) => {
-    if (!$seed && $index == 0) return '';
-    let h = `#${$seed}`;
+  const hash = derived([seedTs, index], ([$seedTs, $index]) => {
+    if (!$seedTs && $index == 0) return '';
+    let h = `#${$seedTs.toISOString()}`;
     if ($index) {
       h += `;${$index}`;
     }
@@ -41,14 +49,14 @@
     const initHash = window.location.hash.replace('#', '');
     if (initHash) {
       const [s, i] = initHash.split(';');
-      seed.set(s);
+      seedTs.set(new Date(s));
       if (i) {
         index.set(parseInt(i, 10));
       } else {
         index.set(0);
       }
     } else {
-      seed.set(epoch(new Date()).toISOString());
+      seedTs.set(epoch(new Date()));
       index.set(0);
     }
 
@@ -59,7 +67,7 @@
     const keyup = (ev: KeyboardEvent) => {
       if (ev.key === '*') {
         ev.preventDefault();
-        seed.set(new Date().toISOString());
+        seedTs.set(new Date());
         index.set(0);
         help.set(false);
         return;
@@ -93,7 +101,7 @@
         }
 
         if ($index == 0) {
-          seed.set(epoch(new Date()).toISOString());
+          seedTs.set(epoch(new Date()));
         }
         index.set(0);
       }
@@ -109,7 +117,7 @@
 
 <div class="container mx-auto flex h-[100vh] min-h-screen items-center justify-center">
   <main class="flex h-full min-h-screen w-full items-center justify-center">
-    {#key $deck}
+    {#key derived([deck, shuffling], ([$deck, $shuffling], set) => set(true))}
       <button
         class="card flex h-full w-full items-center justify-center rounded-3xl shadow-sm hover:shadow-lg"
         on:click={() => {
@@ -147,6 +155,13 @@
                 </tr>
               </tbody>
             </table>
+          </div>
+        {:else if $shuffling}
+          <div
+            class="card-content flex h-full w-full items-center justify-center rounded-3xl p-10 text-left text-4xl"
+            in:fade={{ duration: 400 }}
+          >
+            {$seedTs.toISOString()}
           </div>
         {:else if $index >= 0 && $index < $deck.length - 1}
           <div
