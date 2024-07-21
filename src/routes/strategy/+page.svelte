@@ -78,6 +78,7 @@
         help.set(false);
         return;
       }
+
       if (ev.key === 'Enter' || ev.key === 'ArrowRight') {
         ev.preventDefault();
         help.set(false);
@@ -86,6 +87,7 @@
         }
         return;
       }
+
       if (ev.key === 'ArrowLeft') {
         ev.preventDefault();
         help.set(false);
@@ -94,11 +96,13 @@
         }
         return;
       }
+
       if (ev.key === '?') {
         ev.preventDefault();
         help.update((h) => !h);
         return;
       }
+
       if (ev.key === 'Escape') {
         ev.preventDefault();
         if ($help) {
@@ -106,24 +110,29 @@
           return;
         }
 
-        if ($index == 0) {
-          seedTs.set(epoch(new Date()));
+        if ($index != 0) {
+          index.set(0);
+          return;
         }
-        index.set(0);
+
+        const ts = epoch(new Date());
+        if (ts.getTime() !== $seedTs.getTime()) {
+          seedTs.set(ts);
+        }
       }
     };
-    window.addEventListener('keyup', keyup);
 
+    window.addEventListener('keyup', keyup);
     return () => {
-      hashUnsub();
       window.removeEventListener('keyup', keyup);
+      hashUnsub();
     };
   });
 </script>
 
 <div class="container mx-auto flex h-[100vh] min-h-screen items-center justify-center">
   <main class="flex h-full min-h-screen w-full items-center justify-center">
-    {#key derived([deck, shuffling], ([$deck, $shuffling], set) => set(true))}
+    {#key derived([deck, shuffling, shuffled], ([$deck, $shuffling, $shuffled], set) => set(true))}
       <button
         class="card flex h-full w-full items-center justify-center rounded-3xl shadow-sm hover:shadow-lg"
         on:click={() => {
