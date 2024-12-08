@@ -3,7 +3,9 @@
 declare global {
   namespace App {
     // interface Error {}
-    // interface Locals {}
+    interface Locals {
+      domain: 'olix0r.net' | 'ver.ooo';
+    }
     // Cloudflare Pages
     // interface Platform {
     //   env: {
