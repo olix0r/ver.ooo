@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { onMount, onDestroy } from 'svelte';
-  import { derived, readable, readonly, writable } from 'svelte/store';
-  import { fade } from 'svelte/transition';
   // Based on Brian Eno and Peter Schmidt's Oblique Strategies.
+  import { onMount } from 'svelte';
+  import { derived, writable } from 'svelte/store';
+  import { fade } from 'svelte/transition';
   import { prng } from '$lib/prng';
   import { setSchedule } from '$lib/schedule';
   import { strategies } from '$lib/strategies.json';
@@ -28,7 +28,7 @@
   const index = writable(0);
 
   onMount(() => {
-    return seedTs.subscribe((ts) => {
+    return seedTs.subscribe(() => {
       shuffling.set(true);
       let t = setTimeout(() => {
         shuffling.set(false);
@@ -132,7 +132,7 @@
 
 <div class="container mx-auto flex h-[100vh] min-h-screen items-center justify-center">
   <main class="flex h-full min-h-screen w-full items-center justify-center">
-    {#key derived([deck, shuffling, shuffled], ([$deck, $shuffling, $shuffled], set) => set(true))}
+    {#key derived([deck, shuffling, shuffled], (_, set) => set(true))}
       <button
         class="card flex h-full w-full items-center justify-center rounded-3xl shadow-sm hover:shadow-lg"
         on:click={() => {
