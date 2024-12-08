@@ -9,7 +9,7 @@ export function prng(seed?: string): PRNG {
     return {
       shuffle<T>(array: T[]): T[] {
         return array;
-      }
+      },
     };
   }
 
@@ -23,6 +23,6 @@ export function prng(seed?: string): PRNG {
         [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
       }
       return shuffled;
-    }
+    },
   };
 }
