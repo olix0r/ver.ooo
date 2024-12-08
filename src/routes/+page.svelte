@@ -1,5 +1,8 @@
 <script lang="ts">
   import GitHubProjectOverview from '$lib/GitHubProjectOverview.svelte';
+
+  import type { PageData } from './$types';
+  let { data }: { data: PageData } = $props();
 </script>
 
 <div class="container mx-auto p-4">
@@ -8,7 +11,7 @@
       <div class="flex">
         <img src="/favicon.png" alt="Dog energy" class="mr-2 h-8 w-8 rounded-full" />
         <h1 class="text-3xl text-dark-gold dark:text-light-gold">
-          Oliver Gould &lt;oli&#64;ver.ooo&gt;
+          Oliver Gould &lt;{data.email}&gt;
         </h1>
       </div>
       <ul class="flex space-x-4 text-sm text-dark-green dark:text-light-blue">
