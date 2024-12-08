@@ -1,4 +1,3 @@
-import tailwindcssDarkMode from 'tailwindcss-dark-mode';
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/**/*.{html,js,svelte,ts}'],
@@ -21,6 +20,5 @@ module.exports = {
       textColor: ['dark'],
     },
   },
-  plugins: [tailwindcssDarkMode()],
   // darkMode: 'class', // allows toggling dark mode with class="dark"
 };

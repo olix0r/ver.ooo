@@ -102,7 +102,7 @@
   }
 
   main section p {
-    @apply mt-2  text-dark-blue dark:text-light-green;
+    @apply mt-2 text-dark-blue dark:text-light-green;
   }
 
   main section :global(a) {

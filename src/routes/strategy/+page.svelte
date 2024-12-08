@@ -148,8 +148,10 @@
           >
             <table class="table-auto">
               <thead>
-                <th class="key">Key</th>
-                <th>Action</th>
+                <tr>
+                  <th class="key">Key</th>
+                  <th>Action</th>
+                </tr>
               </thead>
               <tbody>
                 <tr>
