@@ -1,7 +1,7 @@
 <script lang="ts">
   import GitHubProjectOverview from '$lib/GitHubProjectOverview.svelte';
-
   import type { PageData } from './$types';
+
   let { data }: { data: PageData } = $props();
 </script>
 
@@ -9,7 +9,7 @@
   <header class="header">
     <nav>
       <div class="flex">
-        <img src={data.avatar} alt="Dog energy" class="mr-2 h-8 w-8 rounded-full" />
+        <img src={data.avatar} alt={data.email} class="mr-2 h-8 w-8 rounded-full" />
         <div class="flex flex-col">
           <h1 class="text-3xl font-bold text-dark-gold dark:text-light-gold">
             Oliver Gould &lt;{data.email}&gt;
