@@ -13,8 +13,4 @@
 <slot />
 
 <style lang="postcss">
-  :global(:root) {
-    @apply bg-white dark:bg-black;
-    font-family: 'Quattrocento', serif;
-  }
 </style>
