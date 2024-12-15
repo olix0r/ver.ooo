@@ -15,10 +15,10 @@
             Oliver Gould &lt;{data.email}&gt;
           </h1>
           <ul class="ml-1 flex space-x-4 text-sm text-dark-green dark:text-light-blue">
-            <li><a href="#whoami">whoami</a></li>
+            <li><a href="#whoami">#whoami</a></li>
             <!-- li><a href="#work">work</a></li -->
-            <li><a href="#wares">wares</a></li>
-            <li><a href="/strategy">strategies</a></li>
+            <li><a href="#wares">#wares</a></li>
+            <li><a href="/strategy">/strategy</a></li>
           </ul>
         </div>
       </div>
@@ -30,7 +30,7 @@
       <h2>whoami 🌊</h2>
       <div class="p-2 pl-0 text-xl">
         <p>Hi, I'm Oliver Gould. I live in California.</p>
-        <p>I build trustworthy software systems.</p>
+        <p>{data.bio}</p>
       </div>
     </section>
 

@@ -21,9 +21,7 @@ async function loadBlueskyProfile(handle: string) {
 }
 
 export const load: PageServerLoad = async ({ locals, setHeaders }) => {
-  const email = locals.domain === 'olix0r.net' ? 'ver@olix0r.net' : 'oli@ver.ooo';
   let avatar = '/favicon.png';
-
   try {
     const profile = await loadBlueskyProfile(locals.domain);
     if (profile.avatar) {
@@ -43,8 +41,13 @@ export const load: PageServerLoad = async ({ locals, setHeaders }) => {
     });
   }
 
+
+  const isOlix0r = locals.domain === 'olix0r.net'
+  const email = isOlix0r ? 'ver@olix0r.net' : 'oli@ver.ooo';
+  const bio = isOlix0r ? 'I build trustworthy software systems.' : 'I like to run.';
   return {
     email,
+    bio,
     avatar,
   };
 };
