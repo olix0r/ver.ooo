@@ -14,7 +14,7 @@
           <h1 class="text-3xl font-bold text-dark-gold dark:text-light-gold">
             Oliver Gould &lt;{data.email}&gt;
           </h1>
-          <ul class="flex ml-1 space-x-4 text-sm text-dark-green dark:text-light-blue">
+          <ul class="ml-1 flex space-x-4 text-sm text-dark-green dark:text-light-blue">
             <li><a href="#whoami">whoami</a></li>
             <!-- li><a href="#work">work</a></li -->
             <li><a href="#wares">wares</a></li>
@@ -28,7 +28,7 @@
   <main>
     <section id="whoami">
       <h2>whoami 🌊</h2>
-      <div class="p-2 text-xl pl-0">
+      <div class="p-2 pl-0 text-xl">
         <p>Hi, I'm Oliver Gould. I live in California.</p>
         <p>I build trustworthy software systems.</p>
       </div>
@@ -99,11 +99,11 @@
 
 <style lang="postcss">
   main section {
-    @apply mt-8 ml-2;
+    @apply ml-2 mt-8;
   }
 
   main section h2 {
-    @apply text-2xl  text-dark-green dark:text-light-blue;
+    @apply text-2xl text-dark-green dark:text-light-blue;
   }
 
   main section p {

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import '../app.css'
+  import '../app.css';
   import '@fontsource/quattrocento/400.css';
   import '@fontsource/quattrocento/700.css';
 
