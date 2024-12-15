@@ -79,14 +79,10 @@
             <li>
               <GitHubProjectOverview org="olix0r" repo="ver.ooo">
                 <p>
-                  This website; an excuse to play with Typescript, SvelteKit, Tailwind CSS, and
-                  Cloudflare Pages.
-                </p>
-                <p>
-                  This features a landing page inspired by Brian Eno & Peter Schmidt's
-                  <a href="/strategy"><i>Oblique Strategies</i></a>: a minimalist, randomized deck
-                  of cards to help you break out of creative ruts. I use it as a home page and on a
-                  spare monitor.
+                  <a href="/strategy"><i>Oblique Strategies</i></a>: a creative tool devised by
+                  musician Brian Eno and artist Peter Schmidt in 1975. It consists of a deck of
+                  cards, each bearing a cryptic, open-ended prompt or instruction designed to
+                  overcome creative blocks and stimulate lateral thinking.
                 </p>
               </GitHubProjectOverview>
             </li>
