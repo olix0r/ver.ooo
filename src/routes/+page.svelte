@@ -25,7 +25,7 @@
     </nav>
   </header>
 
-  <main>
+  <main class="max-w-3xl">
     <section id="whoami">
       <h2>whoami 🌊</h2>
       <div class="p-2 pl-0 text-xl">
@@ -55,37 +55,41 @@
         <p>What I'm working on:</p>
         <div class="p-2 pl-0">
           <ul class="list-none text-base">
-            <li>
-              <GitHubProjectOverview org="linkerd" repo="linkerd2-proxy">
-                <p>
-                  Where I've spent the majority of my time over the past few years. The Linkerd
-                  proxy is a high-performance, open source service mesh data plane written in Rust.
-                </p>
-              </GitHubProjectOverview>
-            </li>
-            <li>
-              <GitHubProjectOverview org="olix0r" repo="kubert">
-                <p>
-                  Utilities for Kubernetes-oriented applications in Rust. We use this to write both
-                  CLIs and controllers in Linkerd.
-                </p>
-              </GitHubProjectOverview>
-            </li>
-            <li>
-              <GitHubProjectOverview org="tower-rs" repo="tower" name="tower-balance">
-                <p>A generic request load balancer for Tokio. Used by Linkerd.</p>
-              </GitHubProjectOverview>
-            </li>
-            <li>
-              <GitHubProjectOverview org="olix0r" repo="ver.ooo">
-                <p>
-                  <a href="/strategy"><i>Oblique Strategies</i></a>: a creative tool devised by
-                  musician Brian Eno and artist Peter Schmidt in 1975. It consists of a deck of
-                  cards, each bearing a cryptic, open-ended prompt or instruction designed to
-                  overcome creative blocks and stimulate lateral thinking.
-                </p>
-              </GitHubProjectOverview>
-            </li>
+            {#if data.domain === 'olix0r.net'}
+              <li>
+                <GitHubProjectOverview org="linkerd" repo="linkerd2-proxy">
+                  <p>
+                    Where I've spent the majority of my time over the past few years. The Linkerd
+                    proxy is a high-performance, open source service mesh data plane written in
+                    Rust.
+                  </p>
+                </GitHubProjectOverview>
+              </li>
+              <li>
+                <GitHubProjectOverview org="olix0r" repo="kubert">
+                  <p>
+                    Utilities for Kubernetes-oriented applications in Rust. We use this to write
+                    both CLIs and controllers in Linkerd.
+                  </p>
+                </GitHubProjectOverview>
+              </li>
+              <li>
+                <GitHubProjectOverview org="tower-rs" repo="tower" name="tower-balance">
+                  <p>A generic request load balancer for Tokio. Used by Linkerd.</p>
+                </GitHubProjectOverview>
+              </li>
+            {:else}
+              <li>
+                <GitHubProjectOverview org="olix0r" repo="ver.ooo">
+                  <p>
+                    <a href="/strategy"><i>Oblique Strategies</i></a>: a creative tool devised by
+                    musician Brian Eno and artist Peter Schmidt in 1975. It consists of a deck of
+                    cards, each bearing a cryptic, open-ended prompt or instruction designed to
+                    overcome creative blocks and stimulate lateral thinking.
+                  </p>
+                </GitHubProjectOverview>
+              </li>
+            {/if}
           </ul>
         </div>
       </div>
