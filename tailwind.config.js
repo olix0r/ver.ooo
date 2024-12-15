@@ -20,5 +20,4 @@ module.exports = {
       textColor: ['dark'],
     },
   },
-  // darkMode: 'class', // allows toggling dark mode with class="dark"
 };

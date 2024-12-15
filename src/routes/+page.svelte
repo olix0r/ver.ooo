@@ -1,7 +1,7 @@
 <script lang="ts">
   import GitHubProjectOverview from '$lib/GitHubProjectOverview.svelte';
-
   import type { PageData } from './$types';
+
   let { data }: { data: PageData } = $props();
 </script>
 
@@ -9,30 +9,32 @@
   <header class="header">
     <nav>
       <div class="flex">
-        <img src="/favicon.png" alt="Dog energy" class="mr-2 h-8 w-8 rounded-full" />
-        <h1 class="text-3xl text-dark-gold dark:text-light-gold">
-          Oliver Gould &lt;{data.email}&gt;
-        </h1>
+        <img src={data.avatar} alt={data.email} class="mr-2 h-8 w-8 rounded-full" />
+        <div class="flex flex-col">
+          <h1 class="text-3xl font-bold text-dark-gold dark:text-light-gold">
+            Oliver Gould &lt;{data.email}&gt;
+          </h1>
+          <ul class="ml-1 flex space-x-4 text-sm text-dark-green dark:text-light-blue">
+            <li><a href="#whoami">whoami</a></li>
+            <!-- li><a href="#work">work</a></li -->
+            <li><a href="#wares">wares</a></li>
+            <li><a href="/strategy">strategies</a></li>
+          </ul>
+        </div>
       </div>
-      <ul class="flex space-x-4 text-sm text-dark-green dark:text-light-blue">
-        <li><a href="#whoami">whoami</a></li>
-        <li><a href="#work">work</a></li>
-        <li><a href="#wares">wares</a></li>
-        <li><a href="/strategy">strategies</a></li>
-      </ul>
     </nav>
   </header>
 
   <main>
     <section id="whoami">
-      <h2>🌊 whoami</h2>
-      <div class="p-2 text-xl">
+      <h2>whoami 🌊</h2>
+      <div class="p-2 pl-0 text-xl">
         <p>Hi, I'm Oliver Gould. I live in California.</p>
         <p>I build trustworthy software systems.</p>
       </div>
     </section>
 
-    <section id="work">
+    <!-- section id="work">
       <h2>☁️ work</h2>
       <div class="p-2">
         <p>
@@ -45,13 +47,13 @@
           Before that, I helped build and run a website called twitter.com. That's all dead now.
         </p>
       </div>
-    </section>
+    </section -->
 
     <section id="wares">
-      <h2>🌲 wares</h2>
-      <div class="p-2">
+      <h2>wares 🌲</h2>
+      <div class="p-2 pl-0">
         <p>What I'm working on:</p>
-        <div class="p-2">
+        <div class="p-2 pl-0">
           <ul class="list-none text-base">
             <li>
               <GitHubProjectOverview org="linkerd" repo="linkerd2-proxy">
@@ -97,7 +99,7 @@
 
 <style lang="postcss">
   main section {
-    @apply mt-8;
+    @apply ml-2 mt-8;
   }
 
   main section h2 {
