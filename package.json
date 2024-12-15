@@ -45,6 +45,7 @@
     }
   },
   "dependencies": {
+    "@fontsource/quattrocento": "^5.1.0",
     "seedrandom": "^3.0.5"
   }
 }
