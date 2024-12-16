@@ -3,22 +3,26 @@
   import type { PageData } from './$types';
 
   let { data }: { data: PageData } = $props();
+  const { domain, avatar } = data;
+  const email = domain === 'olix0r.net' ? 'ver@olix0r.net' : 'oli@ver.ooo';
 </script>
 
 <div class="container mx-auto p-4">
   <header class="header">
     <nav>
       <div class="flex">
-        <img src={data.avatar} alt={data.email} class="mr-2 h-8 w-8 rounded-full" />
+        <img src={avatar} alt={email} class="mr-2 h-8 w-8 rounded-full" />
         <div class="flex flex-col">
           <h1 class="text-3xl font-bold text-dark-gold dark:text-light-gold">
-            Oliver Gould &lt;{data.email}&gt;
+            Oliver Gould &lt;{email}&gt;
           </h1>
           <ul class="ml-1 flex space-x-4 text-sm text-dark-green dark:text-light-blue">
-            <li><a href="#whoami">#whoami</a></li>
-            <!-- li><a href="#work">work</a></li -->
-            <li><a href="#wares">#wares</a></li>
-            <li><a href="/strategy">/strategy</a></li>
+            {#if domain === 'olix0r.net'}
+              <li><a href="https://ver.ooo/">@ooo</a></li>
+            {:else}
+              <li><a href="/strategy">@strategy</a></li>
+              <li><a href="https://olix0r.net/">@wfh</a></li>
+            {/if}
           </ul>
         </div>
       </div>
@@ -26,36 +30,27 @@
   </header>
 
   <main class="max-w-3xl">
-    <section id="whoami">
-      <h2>whoami 🌊</h2>
-      <div class="p-2 pl-0 text-xl">
-        <p>Hi, I'm Oliver Gould. I live in California.</p>
-        <p>{data.bio}</p>
-      </div>
+    <section id="whoami" class="text-lg">
+      <p>Hi, I'm Oliver Gould. I live in California.</p>
+      {#if domain === 'olix0r.net'}
+        <p>I build trustworthy software systems.</p>
+        <p>
+          I am the creator of <a href="https://linkerd.io">Linkerd</a>, the original service mesh;
+        </p>
+        <p>
+          And the co-founder and CTO of <a href="https://buoyant.io">Buoyant</a>.
+        </p>
+      {:else}
+        <p>I like to run.</p>
+      {/if}
     </section>
-
-    <!-- section id="work">
-      <h2>☁️ work</h2>
-      <div class="p-2">
-        <p>
-          I am the co-founder and CTO of a company called <a href="https://buoyant.io">Buoyant</a>.
-          Buoyant helps organizations make their software more secure and more reliable using the
-          innovative open source service mesh,
-          <a href="https://linkerd.io">Linkerd</a>.
-        </p>
-        <p>
-          Before that, I helped build and run a website called twitter.com. That's all dead now.
-        </p>
-      </div>
-    </section -->
-
+    <hr />
     <section id="wares">
-      <h2>wares 🌲</h2>
       <div class="p-2 pl-0">
-        <p>What I'm working on:</p>
+        <h2>What I'm working on</h2>
         <div class="p-2 pl-0">
           <ul class="list-none text-base">
-            {#if data.domain === 'olix0r.net'}
+            {#if domain === 'olix0r.net'}
               <li>
                 <GitHubProjectOverview org="linkerd" repo="linkerd2-proxy">
                   <p>
@@ -99,7 +94,11 @@
 
 <style lang="postcss">
   main section {
-    @apply ml-2 mt-8;
+    @apply mb-4 mt-4;
+  }
+
+  main hr {
+    @apply my-4 border-t border-dark-green dark:border-dark-blue;
   }
 
   main section h2 {
