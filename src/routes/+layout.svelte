@@ -2,19 +2,20 @@
   import '../app.css';
   import '@fontsource/quattrocento/400.css';
   import '@fontsource/quattrocento/700.css';
+  import type { LayoutData } from './$types';
+  import type { Snippet } from 'svelte';
 
-  export let titleSuffix = '';
+  interface Props {
+    data: LayoutData;
+    titleSuffix?: string;
+    children: Snippet;
+  }
+  const { data, children, titleSuffix = '' }: Props = $props();
+  const { domain } = data;
 </script>
 
 <svelte:head>
-  <title>&lt;🌊&#64;☁️.🌲&gt{titleSuffix}</title>
+  <title>{domain}{titleSuffix}</title>
 </svelte:head>
 
-<slot />
-
-<style lang="postcss">
-  :global(:root) {
-    @apply bg-white dark:bg-black;
-    font-family: 'Quattrocento', serif;
-  }
-</style>
+{@render children()}
