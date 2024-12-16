@@ -23,8 +23,7 @@ export const load: PageServerLoad = async ({ locals: { domain }, setHeaders }) =
     });
   }
 
-
-  const isOlix0r = domain === 'olix0r.net'
+  const isOlix0r = domain === 'olix0r.net';
   const email = isOlix0r ? 'ver@olix0r.net' : 'oli@ver.ooo';
   const bio = isOlix0r ? 'I build trustworthy software systems.' : 'I like to run.';
   return {
