@@ -16,10 +16,10 @@
       <div class="flex">
         <img src={avatar} alt={email} class="mr-2 h-8 w-8 rounded-full" />
         <div class="flex flex-col">
-          <h1 class="text-header-light dark:text-header-dark text-3xl font-bold">
+          <h1 class="text-3xl font-bold text-header-light dark:text-header-dark">
             {sm.current ? `Oliver Gould <${email}>` : email}
           </h1>
-          <ul class="text-accent-light dark:text-accent-dark ml-1 flex space-x-4 text-sm">
+          <ul class="ml-1 flex space-x-4 text-sm text-accent-light dark:text-accent-dark">
             {#if domain === 'olix0r.net'}
               <li><a href="https://ver.ooo/">@ooo</a></li>
             {:else}
@@ -101,15 +101,15 @@
   }
 
   main hr {
-    @apply border-border-light dark:border-border-dark my-4 border-t;
+    @apply my-4 border-t border-border-light dark:border-border-dark;
   }
 
   main section h2 {
-    @apply text-header-light dark:text-header-dark text-2xl;
+    @apply text-2xl text-header-light dark:text-header-dark;
   }
 
   main section :global(a) {
-    @apply text-accent-light dark:text-accent-dark hover:underline;
+    @apply text-accent-light hover:underline dark:text-accent-dark;
   }
 
   main section#wares li {
