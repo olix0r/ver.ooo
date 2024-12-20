@@ -13,10 +13,10 @@
       <div class="flex">
         <img src={avatar} alt={email} class="mr-2 h-8 w-8 rounded-full" />
         <div class="flex flex-col">
-          <h1 class="text-3xl font-bold text-dark-gold dark:text-light-gold">
+          <h1 class="text-3xl font-bold text-header-light dark:text-header-dark">
             Oliver Gould &lt;{email}&gt;
           </h1>
-          <ul class="ml-1 flex space-x-4 text-sm text-dark-green dark:text-light-blue">
+          <ul class="ml-1 flex space-x-4 text-sm text-accent-light dark:text-accent-dark">
             {#if domain === 'olix0r.net'}
               <li><a href="https://ver.ooo/">@ooo</a></li>
             {:else}
@@ -29,7 +29,7 @@
     </nav>
   </header>
 
-  <main class="max-w-3xl">
+  <main class="ml-10 max-w-3xl">
     <section id="whoami" class="text-lg">
       <p>Hi, I'm Oliver Gould. I live in California.</p>
       {#if domain === 'olix0r.net'}
@@ -98,25 +98,18 @@
   }
 
   main hr {
-    @apply my-4 border-t border-dark-green dark:border-dark-blue;
+    @apply my-4 border-t border-border-light dark:border-border-dark;
   }
 
   main section h2 {
-    @apply text-2xl text-dark-green dark:text-light-blue;
-  }
-
-  main section p {
-    @apply mt-2 text-dark-blue dark:text-light-green;
+    @apply text-2xl text-header-light dark:text-header-dark;
   }
 
   main section :global(a) {
-    @apply text-dark-gold hover:underline dark:text-light-gold;
+    @apply text-accent-light hover:underline dark:text-accent-dark;
   }
 
   main section#wares li {
     @apply mt-4;
-  }
-  main section#wares li p {
-    @apply text-dark-blue dark:text-light-green;
   }
 </style>

@@ -2,7 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  @apply bg-white dark:bg-black;
-  font-family: 'Quattrocento', serif;
+[data-theme='ver.ooo'] {
+  --color-primary-light: 235, 224, 212;
+  --color-secondary-light: 60, 70, 60;
+  --color-header-light: 62, 120, 174;
+  --color-accent-light: 242, 121, 94;
+  --color-text-light: 40, 40, 40;
+  --color-border-light: 190, 180, 170;
+
+  --color-primary-dark: 40, 40, 40;
+  --color-secondary-dark: 235, 224, 212;
+  --color-header-dark: 242, 121, 94;
+  --color-accent-dark: 62, 120, 174;
+  --color-text-dark: 235, 224, 212;
+  --color-border-dark: 60, 70, 60;
+
+  --font-family: 'Quattrocento', serif;
+}
+
+[data-theme='olix0r.net'] {
+  --color-primary-light: 245, 247, 250;
+  --color-secondary-light: 235, 238, 242;
+  --color-header-light: 44, 130, 201;
+  --color-accent-light: 255, 99, 72;
+  --color-text-light: 30, 33, 36;
+  --color-border-light: 210, 214, 220;
+
+  --color-primary-dark: 20, 22, 30;
+  --color-secondary-dark: 35, 38, 50;
+  --color-header-dark: 0, 132, 255;
+  --color-accent-dark: 255, 193, 7;
+  --color-text-dark: 230, 233, 240;
+  --color-border-dark: 60, 65, 75;
+
+  --font-family: 'Barlow', sans-serif;
 }
