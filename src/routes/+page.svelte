@@ -1,6 +1,9 @@
 <script lang="ts">
+  import { MediaQuery } from 'svelte/reactivity';
   import GitHubProjectOverview from '$lib/GitHubProjectOverview.svelte';
   import type { PageData } from './$types';
+
+  const sm = new MediaQuery('min-width: 640px');
 
   let { data }: { data: PageData } = $props();
   const { domain, avatar } = data;
@@ -13,10 +16,10 @@
       <div class="flex">
         <img src={avatar} alt={email} class="mr-2 h-8 w-8 rounded-full" />
         <div class="flex flex-col">
-          <h1 class="text-3xl font-bold text-header-light dark:text-header-dark">
-            Oliver Gould &lt;{email}&gt;
+          <h1 class="text-header-light dark:text-header-dark text-3xl font-bold">
+            {sm.current ? `Oliver Gould <${email}>` : email}
           </h1>
-          <ul class="ml-1 flex space-x-4 text-sm text-accent-light dark:text-accent-dark">
+          <ul class="text-accent-light dark:text-accent-dark ml-1 flex space-x-4 text-sm">
             {#if domain === 'olix0r.net'}
               <li><a href="https://ver.ooo/">@ooo</a></li>
             {:else}
@@ -29,7 +32,7 @@
     </nav>
   </header>
 
-  <main class="ml-10 max-w-3xl">
+  <main class="max-w-3xl sm:ml-10">
     <section id="whoami" class="text-lg">
       <p>Hi, I'm Oliver Gould. I live in California.</p>
       {#if domain === 'olix0r.net'}
@@ -98,15 +101,15 @@
   }
 
   main hr {
-    @apply my-4 border-t border-border-light dark:border-border-dark;
+    @apply border-border-light dark:border-border-dark my-4 border-t;
   }
 
   main section h2 {
-    @apply text-2xl text-header-light dark:text-header-dark;
+    @apply text-header-light dark:text-header-dark text-2xl;
   }
 
   main section :global(a) {
-    @apply text-accent-light hover:underline dark:text-accent-dark;
+    @apply text-accent-light dark:text-accent-dark hover:underline;
   }
 
   main section#wares li {
