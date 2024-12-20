@@ -4,6 +4,14 @@ import { env } from '$env/dynamic/private';
 
 export const load: PageServerLoad = async ({ locals: { domain }, setHeaders }) => {
   let avatar = '/favicon.png';
+  if (!env.BLUESKY_USER || !env.BLUESKY_PASS) {
+    console.log('Skipping bluesky profile load');
+    return {
+      domain,
+      avatar,
+    };
+  }
+
   try {
     const profile = await loadBlueskyProfile(domain);
     if (profile.avatar) {

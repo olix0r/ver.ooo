@@ -210,7 +210,7 @@
   }
 
   .card-content {
-    @apply bg-gray-50 text-dark-green dark:bg-gray-950 dark:text-blue-400;
+    @apply bg-gray-50 text-green-800 dark:bg-gray-950 dark:text-blue-400;
   }
 
   .help thead th {
