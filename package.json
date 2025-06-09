@@ -46,7 +46,7 @@
     }
   },
   "dependencies": {
-    "@fontsource/barlow": "^5.2.5",
+    "@fontsource/barlow": "^5.2.6",
     "@fontsource/quattrocento": "^5.2.6",
     "seedrandom": "^3.0.5"
   }
