@@ -13,7 +13,7 @@
   },
   "type": "module",
   "devDependencies": {
-    "@atproto/api": "^0.15.20",
+    "@atproto/api": "^0.15.21",
     "@sveltejs/adapter-auto": "^6.0.1",
     "@sveltejs/adapter-cloudflare": "^7.0.4",
     "@sveltejs/kit": "^2.22.2",
