@@ -15,7 +15,7 @@
   "devDependencies": {
     "@atproto/api": "^0.15.23",
     "@sveltejs/adapter-auto": "^6.0.1",
-    "@sveltejs/adapter-cloudflare": "^7.0.4",
+    "@sveltejs/adapter-cloudflare": "^7.0.5",
     "@sveltejs/kit": "^2.22.2",
     "@sveltejs/vite-plugin-svelte": "^5.1.0",
     "@types/eslint": "9.6.1",
