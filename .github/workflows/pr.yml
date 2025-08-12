@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - run: npm install
       - run: npm run build
       - run: npm run lint
@@ -28,7 +28,7 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - run: gh pr merge '${{ github.event.pull_request.number }}' --auto --merge
         if: github.actor == 'dependabot[bot]'
         env:
